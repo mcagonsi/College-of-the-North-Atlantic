@@ -28,9 +28,9 @@ def sales():
         barcodes = [str(product[0]) for product in products]
         
            
-        
+        lineItems = []
         while True:
-            lineItems = []
+            
             print()
             barcode = input("Product Barcode ('x' to cancel) :  ")
             print()
