@@ -5,7 +5,9 @@ Created on Wed Dec 27 23:46:37 2023
 @author: Chidera
 """
 import software_functions as sf
-
+import locale as lc
+country = lc.getlocale()
+lc.setlocale(lc.LC_ALL, country)
 def title():
     print()
     print()
@@ -181,11 +183,11 @@ def viewStaffList(): #checks the number of current staff and presents it as a li
         if len(employees) == 0:
             print('Staff list is empty. Add an employee')
         else:
-            print('\tName{}Role'.format(' '*25))
+            print(f"  {'Name':20} {'Role':>10}")
             print('='*43)
             for i, employee in enumerate(employees, start = 1):
                 s=5
-                print('{}. {} {}{}\t\t\t\t{}'.format(i,employee[1],employee[2],' '*(s - len(employee[2])),employee[4]))
+                print('{}. {:10} {:10} {:>10}'.format(i,employee[1],employee[2],employee[4]))
             
             print()
             print()
@@ -202,7 +204,7 @@ def viewStaffSales(): #presents info on the total sales made by each worker
     Receipts = sf.readReceiptSales()
     staff = list(set([Receipt[-2] for Receipt in Receipts]))
     
-    print('EMPLOYEE{}SALES'.format(' '*12))
+    print(f"{'EMPLOYEE':15} {'SALE':>10}")
     print('='*40)
     print()
     for user in staff:
@@ -213,8 +215,8 @@ def viewStaffSales(): #presents info on the total sales made by each worker
                 
                 userSales.append(float(Receipt[2]))
         totalSales = sum(userSales) - sum(userSales) * 0.15
-        s=20
-        print('{}{}${:,.2f}'.format(user,' '*(s-len(user)),totalSales))
+
+        print('{:15} {:>10}'.format(user,lc.currency(totalSales)))
     print()
     print('='*40)
     print()
@@ -223,7 +225,7 @@ def viewStaffReturns(): #presents info on the total returns made by each worker
     Receipts = sf.readReceiptSales()
     staff = list(set([Receipt[-2] for Receipt in Receipts]))
     
-    print('EMPLOYEE{}RETURNS'.format(' '*12))
+    print(f"{'EMPLOYEE':15} {'RETURNS':>10}")
     print('='*40)
     print()
     for user in staff:
@@ -234,8 +236,8 @@ def viewStaffReturns(): #presents info on the total returns made by each worker
                 
                 userReturns.append(float(Receipt[2]))
         totalReturns = sum(userReturns) - sum(userReturns) * 0.15
-        s=20
-        print('{}{}${:,.2f}'.format(user,' '*(s-len(user)),totalReturns))
+
+        print('{:15} {:>10}'.format(user,lc.currency(totalReturns)))
     print()
     print('='*40)
     print()
