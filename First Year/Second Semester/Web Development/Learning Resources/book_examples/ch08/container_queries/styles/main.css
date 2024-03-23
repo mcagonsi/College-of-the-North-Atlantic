@@ -1,0 +1,89 @@
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    width: 96%;                         /* changed from 990 pixels */
+    max-width: 1200px;                  /* maximum width of page */
+    background-color: white;
+    margin: 15px auto;
+    padding: 15px 0;
+    border: 1px solid black;
+}
+section, aside, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+section, aside {
+    margin-bottom: 1em;
+}
+p {
+    padding-bottom: .5em;
+}
+header {
+    width: 100%;                        /* full width of body */
+    padding-bottom: 2em;
+}
+header h2 {
+    font-size: 2.25em;                  /* 36 / 16 */
+    color: #f2972e;
+    text-align: center;
+    margin-bottom: .25em;     
+}
+section {
+    container-type: inline-size;
+    width: 50%;                         /* 535 / 990 */
+    float: left;
+    margin-left: 2.0202%;                    /* 20 / 990 */
+    padding: 1.5em 2.52525% 0 0;             /* 25 / 990 */
+}
+section h1 {
+    font-size: 1.625em;                      /* 26 / 16 */
+    margin-bottom: .35em;
+}
+section img {
+    float: left;
+	margin: 0 1em 1em 0;
+	max-width: 100%;                  /* full width of article */
+}
+aside {
+    width: 35.35353%;                        /* 350 / 990 */
+    float: left;
+    padding: 1.25em 2.0202%;                        /* 20 / 990 */
+    background-color: #ffebc6;
+    margin: 1.5em 2.0202% 0 0;               /* 20 / 990 */
+}
+aside h2 {
+    font-size: 1.25em;                       /* 20 / 16 */
+    padding-bottom: .5em;
+}
+aside ul {
+    margin-top: 0;
+    margin-bottom: 1.5em;
+}
+aside li {
+    font-size: .875em;                       /* 14 / 16 */
+    padding-bottom: .35em;
+}
+footer {
+    clear: both;
+    width: 100%;                             /* full width of body */
+    border-top: 2px solid #f2972e;
+    padding-top: .7em;
+}
+footer p {
+    font-size: .75em;                        /* 12 / 16 */
+    text-align: center;
+    margin-right: 2.0202%;                   /* 20 / 990 */
+}
+@container (max-width: 534px) {
+    section p {
+        font-size: .875em;
+    }
+}
+@container (max-width: 400px) {
+    section h1 {
+        font-size: 1.25em;
+    }
+    section img {
+        float: none;
+    }
+}

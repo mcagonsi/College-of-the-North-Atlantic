@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Container Queries</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/main.css">
+
+</head>
+<body>
+    <main>
+        <section>
+            <div id="div1">
+                <p>When the container is reduced to the first width, a container query 
+                    will reduce the size of the font in this box. When the container 
+                    is reduced to the second width, the float will be removed from 
+                    this box and the box that follows.</p>
+            </div>
+            <div id="div2">
+                <p>When the container is reduced to the first width, a container query 
+                    will reduce the size of the font in this box. When the container 
+                    is reduced to the second width, the float will be removed from 
+                    this box and the previous box.</p>                
+            </div>
+            <div id="div3">
+                <p>When the container is reduced to the first width, a container query 
+                    will reduce the size of the font in this box.</p>                
+            </div>
+        </section>
+        <aside>
+            <div>
+                <p>This box is outside of the container and cannot be changed by the 
+                    container queries.</p>
+            </div>
+        </aside>
+    </main>
+</body>
+</html>

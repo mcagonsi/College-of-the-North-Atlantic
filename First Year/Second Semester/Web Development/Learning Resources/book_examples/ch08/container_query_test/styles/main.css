@@ -1,0 +1,62 @@
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    width: 96%;
+    max-width: 1200px;
+    margin: 15px auto;
+    padding: 15px 0;
+}
+section, aside, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+p {
+    padding-bottom: .5em;
+}
+section {
+    container-type: inline-size;
+    width: 60%;
+    padding: 1.5em 1.5%;
+    border: 2px solid black;
+    float: left;
+}
+section p, aside p {
+    padding: 1em;
+}
+#div1, #div2, #div3 {
+    background-color: lightgray;
+}
+#div1, #div2 {
+    width: 48%;
+    height: 12em;
+    margin: 0 1% 1em 1%;
+    float: left;
+}
+#div3 {
+    width: 98%;
+    height: 8em;
+    margin-left: 1%;
+    clear: both;
+}
+aside {
+    width: 32%;
+    height: 21em;
+    float: right;
+    padding: 1.5em 1.5%;
+    border: 1px solid black;
+}
+aside div {
+    background-color: lightgray;
+}
+@container (max-width: 535px) {
+    p {
+        font-size: .875em;
+    }
+}
+@container (max-width: 425px) {
+    #div1, #div2 {
+        float: none;
+        width: 98%;
+        height: 8em;
+    }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <title>Email, URL, and Tel Controls</title>
+    <style>
+    	body { margin: 30px; }
+    </style>
+</head>
+
+<body>
+<form id="email_form" action="survey.php" method="post" >
+<label for="investment">Monthly investment: </label>
+<input type="number" id="investment" min="100" max="1000" step="100" value="300"><br><br>
+<label for="email">Your email address:</label>
+<input type="email" id="email" required><br><br>
+<label for="link">Your website:</label>
+<input type="url" id="url" required><br><br>
+<label for="phone">Your phone number:</label>
+<input type="tel" id="phone" required><br><br>
+<input type="submit" id="submit" value="Submit Survey">
+</form>
+</body>
+</html>

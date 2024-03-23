@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to use different images for different viewport sizes</title>
+    <style>
+        body { margin:0; }
+    </style>
+</head>
+<body>
+    <picture>
+        <source media="(min-width: 960px)" srcset="images/mountains_far.png">
+        <source media="(min-width: 768px)" srcset="images/mountains_mid.png">
+        <source media="(min-width: 460px)" srcset="images/mountains_close.png">
+        <img src="images/mountains_mid.png" alt="">
+    </picture>
+    <picture>
+        <source type="image/avif" srcset="images/mountains_small.avif">
+        <img src="images/mountains_small.png" alt="">
+    </picture>
+</body>
+</html>

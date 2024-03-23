@@ -1,0 +1,302 @@
+/* type selectors */
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 15px 0;
+}
+section, aside, h1, h2, h3, p {
+	margin: 0;
+	padding: 0;
+}
+p {
+	font-size: .8125em;
+	padding-bottom: .5em;
+	line-height: 130%;
+}
+em {
+	font-weight: bold;
+}
+a {
+	font-weight: bold;
+	text-decoration: none;
+}
+a:link, a:visited {
+	color: #931420 !important;
+}
+a:hover, a:focus {
+	color: black !important;
+}
+
+/* the styles for the header */
+header {
+	width: 100%;
+	padding-bottom: 2em;
+	text-align: center;
+}
+header img {
+	width: 8.0808%;
+	max-width: 80px;
+	min-width: 40px;
+}
+header h2 {
+	font-size: 1.125em;
+	color: #f2972e;
+	text-shadow: 2px 3px 0 black;
+	margin-bottom: .25em;
+}
+header h3 {
+	font-size: .75em;
+	font-style: italic;
+	margin-left: 0;
+}
+#mobile_menu {
+	display: block;
+}
+.slicknav_menu {
+	background-color: #facd8a !important;
+}
+/* hide the nav menu initially */
+#nav_menu {
+	display: none;
+}
+
+/* the styles for the section */
+section {
+	width: 95.9596%;
+	margin: 0 2.0202% 1em 2.0202%;
+	padding: 1.5em 0 0 0;
+}
+section ul {
+	margin-top: 0;
+	margin-bottom: 1.5em;
+}
+section li {
+	font-size: .875em;
+	padding-bottom: .35em;
+}
+section h1 {
+	font-size: 1.125em;
+	margin-bottom: .35em;
+}
+section h2 {
+	font-size: 1em;
+	margin-bottom: .35em;
+}
+a.date_passed {
+	color: gray;
+}
+
+/* the styles for the sidebar */
+aside {
+	width: 91.9192%;
+	padding: 2.0202%;
+	background-color: #ffebc6;
+	margin: 0 2.0202% 1em 2.0202%;
+}
+aside h2 {
+	font-size: 1.125em;
+	padding-bottom: .5em;
+}
+aside h3 {
+	font-size: .9375em;
+	color: #931420;
+	padding-bottom: .5em;
+}
+aside p {
+	margin-bottom: .5em;
+}
+aside ul {
+	margin-top: 0;
+	margin-bottom: 1.5em;
+}
+aside li {
+	font-size: .875em;
+	padding-bottom: .35em;
+}
+/* the styles for the footer */
+footer {
+	width: 100%;
+	border-top: 2px solid #f2972e;
+	padding-top: .7em;
+}
+footer p {
+	font-size: .6875em;
+	text-align: center;
+}
+
+/* media queries */
+
+/* increase font sizes */
+@media only screen and (min-width: 383px) {
+    header h2 {
+        font-size: 1.375em;
+    }
+    header h3 {
+        font-size: .875em;
+    }
+    footer p {
+        font-size: .75em;
+    }
+}
+/* increase font sizes */
+@media only screen and (min-width: 481px) {
+	header h2 {
+		font-size: 1.625em;
+	}
+	header h3 {
+		font-size: 1em;
+	}
+}
+/* float section, aside, and header image and display navigation menu */
+@media only screen and (min-width: 772px) {
+	html {
+		background-image: linear-gradient(to bottom, white, #facd81 100%);
+	}
+	body {
+		width: 96%;
+		background-color: white;
+		margin: 15px auto;
+		border: 1px solid black;
+	}
+	header {
+		text-align: left;
+	}
+	header img {
+		float: left;
+		margin-left: 2.0202%;
+	}
+	header h2 {
+		font-size: 2.25em;
+		margin-left: 12.12121%;
+	}
+	header h3 {
+		font-size: 1.25em;
+		margin-left: 12.12121%;
+	}
+	#nav_menu {
+        display: block;
+    }
+    #mobile_menu {
+        display: none;
+    }
+	/* the styles for the navigation menu - operation */
+	#nav_menu ul {
+		width: 100%;
+		list-style-type: none;
+		position: relative;
+	}
+	#nav_menu ul ul {
+		display: none;
+		position: absolute;
+		top: 100%;
+	}
+	#nav_menu ul ul li {
+		float: none;
+		position: relative;
+	}
+	#nav_menu ul ul li ul {
+		position: absolute;
+		left: 100%;
+		top: 0;
+	}
+	#nav_menu ul li.lastitem ul li ul {
+		position: absolute;
+		left: -100%;
+		top: 0;
+	}
+	#nav_menu ul li {
+		float: left;
+	}
+	#nav_menu ul li:hover > ul {
+		display: block;
+	}
+	#nav_menu > ul::after {
+		content: "";
+		clear: both;
+		display: block;
+	}
+	/* the styles for the navigation menu - formatting */
+	#nav_menu ul {
+		margin: 0;
+		padding: 0;
+	}
+	#nav_menu ul li {
+		width: 20%;
+	}
+	#nav_menu ul li a {
+		font-size: .875em;
+		text-align: center;
+		display: block;
+		padding: .7em 0;
+		background-color: #facd8a;
+	}
+	#nav_menu ul li a.current {
+		color: #f2972e !important;
+	}
+	#nav_menu ul li:hover ul {
+		width: 100%;
+	}
+	#nav_menu ul li:hover ul li:hover ul li {
+		width: 100%;
+	}
+	section {
+		width: 54.0404%;
+		float: left;
+		margin-left: 2.0202%;
+		padding: 1.5em 0 0 0;
+	}
+	section h1 {
+	    font-size: 1.5em;
+    }
+    section h2, aside h2 {
+	    font-size: 1.125em;
+    }
+	aside {
+		width: 35.35353%;
+		float: left;
+		margin: 1.5em 2.0202% 0 0;
+	}
+	aside h2 {
+		font-size: 1.25em;
+	}
+    aside h3 {
+        font-size: .9375em;
+    }
+	footer {
+		clear: both;
+		text-align: right;
+		margin-right: 2.0202%;
+	}
+}
+/* increase font sizes */
+@media only screen and (min-width: 887px) {
+	#nav_menu ul li a {
+		font-size: .875em;
+	}
+	section h1 {
+		font-size: 1.625em;
+	}
+	section h2 {
+		font-size: 1.25em;
+	}
+	aside h2 {
+		font-size: 1.25em;
+	}
+	aside h3 {
+		font-size: 1em;
+	}
+	aside li {
+		font-size: .8125em;
+	}
+}
+/* increase font sizes and specify max body width */
+@media only screen and (min-width: 1007px) {
+	body {
+		max-width: 1200px;
+	}
+	#nav_menu ul li a {
+		font-size: .875em;
+	}
+}

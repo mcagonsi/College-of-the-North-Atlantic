@@ -1,0 +1,81 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<title>Fluid widths</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			width: 720px;
+			font-family: "Courier New";
+			font-weight: bold;
+			margin: 0 auto;
+			text-align: center;
+		}
+		p {
+			margin: 0;
+			padding: 5px 0;
+		}
+		div {
+			height: 45px;
+			padding:5px 0;
+		}
+		header {
+			height: 75px;
+			padding: 5px 0;
+			border: 2px solid black;
+			background-color: #6fa8cf;
+		}
+		section {
+			width: 446px;
+			height: 300px;        
+			float: left;
+			padding: 5px 0;
+			border-left: 2px solid black;
+			border-right: 2px solid black;
+			background-color: #a3c8e1;
+		}
+		aside {
+			width: 268px;
+			height: 300px;
+			float: right;
+			padding: 5px 0;
+			border-right: 2px solid black;
+			background-color: #c8dfee;
+		}
+		footer {
+			clear: both;
+			height: 50px;
+			padding: 5px 0;
+			border: 2px solid black;
+			background-color: #6fa8cf;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<p>Fixed width: 960px<br>
+			Fluid width: 90%</p>
+	</div>
+	<header>
+		<p>Fixed width: 960px<br>
+		   Fluid width: 100%</p>
+	</header>
+   	<main>
+		<section>
+			<p>Fixed width: 600px<br>
+			   Fluid width: 62.5%</p>
+		</section>
+		<aside>
+			<p>Fixed width: 360px<br>
+			   Fluid width: 37.5%</p>
+		</aside>
+	</main>
+	<footer>
+		<p>Fixed width: 960px<br>
+		   Fluid width: 100%</p>
+	</footer>
+</body>
+</html>

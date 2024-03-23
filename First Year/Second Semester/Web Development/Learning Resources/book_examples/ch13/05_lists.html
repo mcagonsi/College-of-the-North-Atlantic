@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <title>Drop-down Lists and List Boxes</title>
+    <style>
+    	body {
+ 		    margin: 30px;
+		}
+    </style>
+</head>
+
+<body>
+<form id="myform" action="order.php" method="post">
+
+Style:<br>
+<select id="size_and_style">
+    <optgroup label="The New Yorker">
+        <option value="ny10">10"</option>
+        <option value="ny12">12"</option>
+        <option value="ny16">16"</option>
+    </optgroup>
+    <optgroup label="The Chicago">
+        <option value="chi10">10"</option>
+        <option value="chi12">12"</option>
+        <option value="chi16">16"</option>
+    </optgroup>
+</select><br><br>
+
+Toppings:<br>
+<select id="toppings" size="4" multiple>
+    <option value="pepperoni">Pepperoni</option>
+    <option value="sausage" selected>Sausage</option>
+    <option value="mushrooms">Mushrooms</option>
+    <option value="olives">Black olives</option>
+    <option value="onions">Onions</option>
+    <option value="bacon">Canadian bacon</option>
+    <option value="pineapple">Pinapple</option>
+</select><br><br><br>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to use different size images for different viewport sizes</title>
+    <style>
+        body { margin:0; }
+    </style>
+</head>
+<body>
+    <img src="images/mountains_medium.png" alt="mountains"
+         srcset="images/mountains_large.png 800w, 
+                 images/mountains_medium.png 600w, 
+                 images/mountains_small.png 400w" 
+         sizes="(min-width: 1200px) 800px, (min-width: 800px) 600px, 100vw">
+</body>
+</html>

@@ -1,0 +1,256 @@
+/* type selectors */
+html {
+	background-image: linear-gradient(to bottom, white 0%, #facd8a 100%);	
+}
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    width: 96%;
+    max-width: 1200px;
+	background-color: white;
+	margin: 15px auto;
+	padding: 15px 0;
+	border: 1px solid black;
+    display: grid;
+    grid-template: repeat(4, auto) / repeat(12, 1fr);
+    grid-gap: 1.5em;
+}
+section, aside, h1, h2, h3, p {
+	margin: 0;
+	padding: 0;
+}
+a {	font-weight: bold; }
+a:link, a:visited { color: #931420; }
+a:hover, a:focus { color: black; }
+p {
+	font-size: .875em;
+	padding-bottom: .5em;
+}
+em { font-weight: bold; }
+
+/* the styles for the header */
+header { 
+    grid-row: 1 / 2;
+    grid-column: 1 / span 12;
+}
+header h2 {
+	font-size: 2.25em;
+    color: #f2972e;
+    text-shadow: 2px 3px 0 black;
+    margin-left: 12%;
+	margin-bottom: .25em;
+}
+header h3 {
+	font-size: 1.25em;
+	font-style: italic;
+    margin-left: 12%;
+}
+header img {
+    width: 8%;
+    max-width: 80px;
+    min-width: 40px;
+	float: left;
+	margin-left: 2%;
+}
+
+/* The styles for the navigation menu */
+#nav_menu {
+    grid-row: 2 / 3;
+    grid-column: 1 / span 12;
+}
+#nav_menu ul {
+	list-style: none;
+    display: grid;
+    grid-template: auto / repeat(5, 1fr);
+    align-content: center;
+	margin: 0;
+	padding: 0;
+}
+#nav_menu ul li a {
+	text-align: center;
+	display: block;
+	padding: .7em 0;
+	text-decoration: none;
+	background-color: #facd8a;
+}
+#nav_menu ul li a.current {
+	color: #f2972e !important;
+}
+
+/* the styles for the section */
+section {
+	margin-left: 3.4%;
+    grid-row: 3 / 4;
+    grid-column: 1 / span 7;
+}
+section ul { 
+	margin-top: 0;
+	margin-bottom: 1.5em; 
+}
+section li {
+	font-size: 95%;
+	padding-bottom: .35em;
+}
+section h1 {
+	font-size: 170%; 
+	margin-bottom: 0.35em;
+}
+section h2 {
+	font-size: 1.3em;
+	margin-bottom: 0.35em;
+}
+
+#contact_us { margin-top: 1em; }
+a.date_passed  { color: gray; }
+
+/* the styles for the sidebar */
+aside {
+    max-height: 320px;
+    min-height: 200px;    
+	padding: 5%;
+	background-color: #ffebc6;
+	margin-right: 5%;
+    grid-row: 3 / 4;
+    grid-column: 8 / span 5;
+}
+aside h2 {
+	font-size: 1.25em;
+	padding-bottom: .5em;
+}
+aside h3 {
+	font-size: 1em;
+	color: #931420;
+	padding-bottom: .5em;
+}
+aside p { margin-bottom: .5em; }
+
+/* the styles for the footer */
+footer {
+	border-top: 2px solid #f2972e;
+	padding-top: .7em;
+    grid-row: 4 / 5;
+    grid-column: 1 / span 12;
+}
+footer p {
+	font-size: .75em;
+    text-align: right;
+    margin-right: 2%;
+}
+#mobile_menu {
+    display: none;
+}
+
+/* media queries */
+
+/* decrease font sizes to keep content from rolling */
+@media only screen and (max-width: 886px) {
+    section h1 {
+	    font-size: 1.5em;
+    }
+	#nav_menu ul li a {
+		font-size: .875em;
+	}
+}
+
+/* decrease font sizes to keep content from rolling */
+@media only screen and (max-width: 837px) {
+	section h2, aside h2 {
+		font-size: 1.125em;
+	}
+	aside h3 {
+	    font-size: .9375em;
+    }
+}
+
+/* remove floating from section, aside, and header image and display mobile menu */
+@media only screen and (max-width: 771px) {
+
+    body {
+	    width: 100%;
+	    margin: 0;
+	    border: none;
+        grid-template: repeat(5, auto) / 1fr;
+        grid-gap: 0;
+    }
+    header {
+        grid-column: 1 / 2;
+        padding-bottom: 1.5em;
+        display: grid;
+        grid-template: repeat(3, auto) / 1fr;
+        grid-gap: .3em;
+        justify-items: center;        
+    }
+    header h2 {
+	    font-size: 1.625em;
+	    margin-left: 0;
+    }
+    header h3 {
+	    font-size: 1em;
+	    margin-left: 0;
+    }
+    header img {
+        float: none;
+        margin-left: 0;
+        margin-bottom: 1em;
+    }
+    #nav_menu {
+    	display: none;
+    }
+    #mobile_menu {
+    	display: block;
+        grid-row: 2 / 3;
+        grid-column: 1 / 2;
+    }
+    .slicknav_menu {
+	    background-color: #facd8a !important;	
+    }
+    section {
+        margin: 1.2em 2%;
+        padding-right: 0;
+        grid-row: 4 / 5;
+        grid-column: 1 / 2;
+    }
+    aside {
+        margin-right: 0;
+        padding: 1em 2% 0;
+        grid-row: 3 / 4;
+        grid-column: 1 / 2;
+    }
+    footer {
+        grid-row: 5 / 6;
+        grid-column: 1 / 2;
+    }
+    footer p {
+        margin-right: 0;
+        text-align: center;
+    }
+}
+
+/* decrease font sizes */
+@media only screen and (max-width: 480px) {
+    header h2 {
+	    font-size: 1.375em;
+    }
+    header h3 {
+	    font-size: .875em;
+    }
+}
+
+/* decrease font sizes */
+@media only screen and (max-width: 410px) {
+    header h2, section h1, aside h2 {
+        font-size: 1.125em;
+    }
+    header h3 {
+        font-size: .75em;
+    }
+    section h2 {
+        font-size: 1em;
+    }
+    aside h3 {
+	    font-size: .9375em;
+    }
+    footer p {
+	    font-size: .6875em;
+    }
+}
