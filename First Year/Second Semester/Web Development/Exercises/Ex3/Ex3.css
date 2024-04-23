@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div {
+    border:solid red 2px;
+    padding: 5px;
+}
+
+p {
+    color:blue;
+}
+
+div code { /* descendant rule */
+    font-weight:bold;
+}
+
+div .interesting {
+    font-size:large;
+}
+
+div>code { /* child */
+    color:aqua;
+}
+
+code+p { /* adjacent sibling */
+    color:brown;
+}
+
+code~p { /* general sibling */
+    font-style:italic;
+}
+
+code, p {
+    background-color:lightgray;
+}

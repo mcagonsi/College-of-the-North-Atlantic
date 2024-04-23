@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Canditate Registration Page</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <nav>
+            <img src = 'https://www.careerabroad.ca/wp-content/uploads/2020/04/1_member_logo_College_of_the_North_Atlantic.png' alt ='CNA'/>
+
+            <ul>
+                <li>Home</li>
+                <li>Contact Us</li>
+            </ul>
+        </nav>
+
+        <div id="reg_form">
+            <form name="registration" onsubmit="course_reg.html">
+                <h1>Candidate Registration</h1><br>
+                <fieldset><legend>Candidate Information</legend>
+                    <label>First Name: </label><input type ='text' id="fName" title = 'registration' required autofocus><br/>
+                    <label>Last Name: </label><input type = 'text' id="lName" title ='registration' require><br/>
+                    <label>Email :</label><input type = 'email' id="email" title="registration" required><br> 
+                    <label>Confirm Email:</label><input type ='email' id="cemail" title="registration"><br/>
+                    <label>Password: </label><input type="password" id="password" title="registration" required><br/>
+                    <label>Confirm Password: </label><input type ='password' id="cpassword" title='registration'><br/>
+                </fieldset>
+
+                <input type="submit" value="Register"><input type="reset" value="cancel">
+
+
+            </form>
+        </div>
+    </body>
+    <link rel="javascript" href="index.js">
+</html>

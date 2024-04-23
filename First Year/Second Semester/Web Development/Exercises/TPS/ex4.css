@@ -1,0 +1,50 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:lightslategray;
+}
+
+header img {
+    width: 100%;
+
+}
+
+#mission {
+    color:rgb(240, 179, 67);
+    text-align: center;
+    font-size:130%;
+}
+
+#fourhs{
+    font-weight:bold;
+}
+
+.article {
+    border: blue solid 2px;
+    margin: 1em;
+}
+
+.art_img {
+    float:left;
+}
+
+body {
+    width:75%;
+    margin:auto;
+    background-color: white;
+    padding:10px;
+}
+
+.clear { /* this undoes floating */
+    clear: left;
+}
+
+.article div span:first-child{
+    color:orange;
+    font-weight: bold;
+}
+
+.article div:nth-last-of-type(2){
+    color:blue;
+    font-style: italic;
+    font-weight: bold;
+}

@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+img {
+    width:10%;
+    display:inline;
+    
+}
+
+h1 {
+    color:blue;
+    font-style:italic;
+    font-size:400%;
+    display:inline;
+    
+}
+
+header{
+    border:1px solid green;
+    margin-bottom: 5px;
+    
+    
+    
+}
+
+main{
+    background-color: #D3D3D3;
+    padding:5px;
+    border: 1px solid brown;
+}
+
+
+.details {
+    font-weight: bold;
+}
+
+.ontime {
+    color:green;
+}
+
+.delayed {
+    color:#FF3650;
+}
+
+.early {
+    color:#FFAF00;
+}
+
+.departure {
+    background-color:white;
+    border: 2px solid green;
+    margin:5px;
+    padding:5px;
+}
+
+.arrival {
+    background-color: white;
+    border: 2px solid purple;
+    margin: 5px;
+    padding:5px; 
+}
+
+.categories {
+    padding-left:25px;
+}
