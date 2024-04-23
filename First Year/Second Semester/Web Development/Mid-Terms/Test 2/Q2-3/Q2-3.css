@@ -1,0 +1,61 @@
+/*
+    CP1520 - Web Development
+    Quiz 2, Challenge 3 - Create the timesheet.
+*/
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: blue;
+}
+
+main {
+    width:500px;
+    margin:auto;
+    padding:20px;
+    background-color:lightcoral;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+table, td, th  {
+    border: 1px solid black;
+}
+
+th, td {
+    width: 40px;
+    height: 20px;
+    padding:0px 5px 0px 5px;
+}
+
+table tr:nth-child(4),table tr:nth-child(5),table tr:nth-child(6),table tr:nth-child(7), table tr:last-child {
+    text-align: right;
+}
+
+th {
+    text-align: center;
+}
+
+table tr:nth-child(4) td:first-child, table tr:last-child td:first-child{
+    text-align: center;
+}
+
+table tr:last-child td:last-child {
+    color:green;
+    font-weight: bold;
+}
+
+table tr:first-child, table tr:nth-child(2), table tr:last-child{
+    background-color: darksalmon;
+}
+
+table tr:nth-child(3),table tr:nth-child(4),table tr:nth-child(5),table tr:nth-child(6), table tr:nth-last-child(2) {
+    background-color: burlywood;
+
+
+}

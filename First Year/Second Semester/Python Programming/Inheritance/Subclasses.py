@@ -1,0 +1,3 @@
+class CustomRequestError(Exception):
+    pass
+

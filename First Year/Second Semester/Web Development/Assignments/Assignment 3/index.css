@@ -1,0 +1,43 @@
+
+.client{
+    text-decoration:underline;
+    font-style:italic;
+    font-weight: bold;
+}
+
+
+table {
+    width:550px;
+    height:650px;
+    border:6px solid black;
+    border-collapse: collapse;
+}
+thead th, thead td {
+    border:1px dashed black;
+}
+
+img {
+    width:150px;
+    height: 150px;
+}
+th ,td{
+    border:1px solid black;
+    padding:2px;
+    
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgb(133, 91, 64);
+}
+
+tr td:last-child, tbody tr td:nth-last-child(2){
+    text-align:right;
+}
+
+tfoot {
+    color:brown;
+}
+
+body {
+     font-family: Arial, Helvetica, sans-serif;
+}

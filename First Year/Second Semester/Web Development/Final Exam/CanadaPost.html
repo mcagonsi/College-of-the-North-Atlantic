@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Canada Post Delivey Info</title>
+        <link rel="stylesheet" href="CanadaPost.css">
+    </head>
+    <body>
+        
+        <h1>Canada Post</h1><img src="cpc-logo.svg" alt="canadapost_logo">
+        <form>
+            <fieldset>
+                <legend>Sender</legend>
+                <table>
+                    
+                    <tr>
+                        <td><label>Name:</label> </td><td><input type="text" id="sender_name" minlength="3" name="delivery_info" placeholder="" required title="Sender's name must be specified" autofocus>*</td>
+                    </tr>
+                    <tr>
+                        <td><label for="sender_house">House/Apt # and Street:</label></td><td><input type="house#" id="sender_house" minlength="3" name="delivery_info" ></td>
+                        
+                    </tr>
+                    <tr>
+                        <td><label for="sender_City">Town/City:</label></td><td><input type="text" id="sender_City" minlength="3" name="delivery_info" /></td>
+                    </tr>
+                    <tr>
+                        <td> <label>Prov:</label></td>
+                        <td>
+                            <select title ='province' id="sender_province" name="prov">
+                                <option value ='NL' name="prov" selected>Newfoundland and Labrador</option>
+                                <option value ='ON' name="prov">Ontario</option>
+                                <option value ='Nova' name="prov">Nova Scotia</option>
+                                <option value ='NB' name="prov">Newbrunswick</option>
+                                <opiton value="PEI" name="prov">Prince Edward Island</opiton>
+                                <option value="QU" name="prov">Quebec</option>
+                                <option value ='MAN' name="prov">Manatoba</option>
+                                <option value = 'SKC' name="prov">Saskatchewan</option>
+                                <option value="AB" name="prov">Alberta</option>
+                                <option value = 'BC' name="prov">British Columbia</optiond>
+                                <option value="YU" name="prov">Yukon</option>
+                                <option value="NT" name="prov">Northwest Territories</option>
+                                <opton value="NUN" name="prov">Nunavut</opton>
+        
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="sender_postal_code">Postal Code:</label>  </td><td> <input   type="text" id="sender_postal_code" name="delivery_info"/></td>
+                    </tr>
+                    
+                </table>
+                    
+                
+
+                
+            </fieldset>
+            <fieldset>
+                <legend>Recipient</legend>
+                <table>
+                    
+                    <tr>
+                        <td><label>Name:</label> </td><td><input type="text" id="recipient_name" minlength="3" name="delivery_info" placeholder="" required title="Recipient's Name must be specified." autofocus>*</td>
+                    </tr>
+                    <tr>
+                        <td><label for = 'recipient_house'>House/Apt # and Street:</label></td><td><input type="house#" id="recipient_house" minlength="3" name="delivery_info" ></td>
+                        
+                    </tr>
+                    <tr>
+                        <td><label for="recipient_City">Town/City:</label></td><td><input type="text" id="recipient_City" minlength="3" name="delivery_info" /></td>
+                    </tr>
+                    <tr>
+                        <td> <label>Prov:</label></td>
+                        <td>
+                            <select title ='province' id="recipient_province" name="prov">
+                                <option id="NL" value ='NL' name="prov" selected>Newfoundland and Labrador</option>
+                                <option value ='ON' name="prov">Ontario</option>
+                                <option value ='Nova' name="prov">Nova Scotia</option>
+                                <option value ='NB' name="prov">Newbrunswick</option>
+                                <opiton value="PEI" name="prov">Prince Edward Island</opiton>
+                                <option value="QU" name="prov">Quebec</option>
+                                <option value ='MAN' name="prov">Manatoba</option>
+                                <option value = 'SKC' name="prov">Saskatchewan</option>
+                                <option value="AB" name="prov">Alberta</option>
+                                <option value = 'BC' name="prov">British Columbia</optiond>
+                                <option value="YU" name="prov">Yukon</option>
+                                <option value="NT" name="prov">Northwest Territories</option>
+                                <opton value="NUN" name="prov">Nunavut</opton>
+        
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="recipient_postal_code">Postal Code:</label>  </td><td> <input   type="text" id="recipient_postal_code" name="delivery_info"/></td>
+                    </tr>
+                    
+                </table>
+                    
+                
+
+                
+            </fieldset>
+            <fieldset>
+                <legend>Dimensions</legend>
+
+                <div class ='dimensions'>
+                    <label for="length">L</label><input type="number" id="length" name="measurement">
+                    <label for="width">W</label><input type="number" id="width" name="measurement">
+                    <label for="height">H</label><input type="number" id="height" name="measurement">
+
+                    <label for="cm">cm</label><input type="radio" name="measurement_unit" id="cm" value="cm" checked/>
+                    <label for="inch">in</label><input type="radio" name="measurement_unit" id="inch" value="in">
+                </div>
+                <div class ='dimensions'>
+                    <label for ='weight'>Weight</label><input type="number" id="weight" name="measurement">
+
+                    <label for="gram">g</label><input type="radio" name="weight_unit" id="gram" value="gram" checked/>
+                    <label for="oz">oz</label><input type="radio" name="weight_unit" id="oz" value="oz">
+                </div>
+                <div class ='dimensions'>
+                    <label for="letter">Letter</label><input type="radio" name="packaging" id="letter" value="letter" checked/>
+                    <label for="box">Box</label><input type="radio" name="packaging" id="box" value="box">
+                </div>
+
+                
+            </fieldset>
+            <fieldset>
+                <legend>Delivery Optons</legend>
+                    <label for = 'regular'>Regular</label><input type="radio" name="delivery_options" id="regular" value="regular" checked/>
+                    <label for ='xpresspost'>Xpresspost</label><input type="radio" name="delivery_options" id="xpresspost" value="xpresspost">
+                    <label for="priority">Priority</label><input type="radio" name="delivery_options" id="priority" value="priority" />
+                    <label for="flat_rate">Flat Rate Box</label><input type="radio" name="delivery_options" id="flat_rate" value="flat_rate"><br>
+
+                    <input type="checkbox" name="delivery_options" id="registered" value="registered"><label for="registered">Registered</label><br>
+                    <input type="checkbox" name="delivery_options" id="insured" value="insured"><label for="insured">Insured</label>
+
+                
+            </fieldset>
+            <br>
+            <input type="submit" value="Submit" id="submit"/>
+            <input type="reset" value="Reset" id="reset"/>
+        </form>
+        
+    </body>
+</html>

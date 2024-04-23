@@ -1,0 +1,80 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    /* new */
+    --tps_color:  orange;
+    --tps_accent: blue;
+    --tps_bg:     lightslategray;
+    --tps_text:   brown;
+    background-color:var(--tps_bg);
+    color: var(--tps_text);
+}
+
+body {
+    width:75%;
+    margin:auto;
+    margin-top: 20px;
+    background-color:white;
+    padding: 10px;
+}
+
+#mission {
+    color: var(--tps_color); /* changed */
+    font-size:130%;
+    text-align:center;
+}
+
+#fourhs {
+    font-weight:bold;
+}
+
+main p {
+    font-weight:bold;
+    font-style:italic;
+    font-size:120%;
+    color:var(--tps_accent);
+}
+
+/* new */
+.tps {
+    font-family: algerian, serif;
+    color: var(--tps_color);
+    font-size: 110%;
+}
+
+.article {
+    margin-top:1em;
+    border: solid var(--tps_accent) 2px; /* changed width from 1 to 2 */
+}
+
+.article img {
+    float: left;
+    margin: 5px;
+    border: solid 1px var(--tps_color); /* changed */
+    height: 6em; /* changed */
+}
+
+/* new - bold orange for first part of each line of the article*/
+.article div span:first-child {
+    color:var(--tps_color);
+    font-weight:bold;
+}
+
+/* new - italics for the date of the article */
+.article div span:nth-of-type(3) {
+    font-style:italic;
+}
+
+/* new - blue italic for the last line of the article */
+.article div:nth-last-of-type(2){
+    color:var(--tps_accent);
+    font-style:italic;
+    font-weight: bold;
+}
+
+header img {
+    width:100%;
+}
+
+.clear {
+    clear: left;
+}

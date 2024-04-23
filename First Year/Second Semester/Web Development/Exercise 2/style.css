@@ -1,0 +1,31 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+em {
+    font-weight: bold;
+}
+header {
+    color:blue;
+}
+
+#Block {
+    width:100%;
+    font-size: 100%;
+}
+
+img {
+    padding-left: 20px;
+}
+
+#Inline {
+    width:70%;
+}
+
+footer {
+    font-size: 75%;
+}
+
+title {
+    color:red;
+    size:50px;
+}

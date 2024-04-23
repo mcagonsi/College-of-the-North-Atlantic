@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pet Appointment</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <nav>
+            <img  src = 'https://static.vecteezy.com/system/resources/previews/021/564/286/non_2x/pet-clinic-logo-with-dog-cat-and-hand-with-cross-symbol-pet-care-logo-with-dog-cat-bird-and-hand-symbols-vector.jpg' alt="pet-clinic"/>
+
+            <ul>
+                <li>Home</li>
+                <li>Contact Us</li>
+            </ul>
+        </nav>
+
+        <div id="reg_form">
+            <h1>Schedule Your Appointment Today!</h1>
+            <form>
+                <fieldset>
+                    <legend>Pet Appointment</legend>
+                    <label>Client Name: </label>    <input required type="text" id="client" minlength="3" name="appointment" placeholder="Client Full Name"><br>
+                    <label>Phone: </label>    <input required type="number" id="phone" minlength="3" name="appointment" placeholder="Phone number" required pattern="" title="Phone requr"><br>
+                    <label>Pet Name: </label>   <input required type="text" id="pet" minlength="3" name="appointment" placeholder="Pet Name"/><br>
+                    <label>Date: </label>   <input   type="date" id="app_date" placeholder="mm/dd/yyyy"/><br>
+                    <label>Time: </label>   <input type="time" id="app_time" placeholder="e.g 12:00 P.M."/><br>
+
+                    <label>Room 1</label><input type="radio" name="room" id="room1" value="1" checked/>
+                    <label>Room 2</label><input type="radio" name="room" id="room2" value="2">
+                    <label>Room 3</label><input type='radio' name="room" id="room3" value="3"/>
+                    <br>
+
+                    <input type="submit" value="Book" id="book_app"/>
+                    <input type="reset" value="Clear" id="clear"/>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+    <link rel="javascript" href="index.js">
+</html>

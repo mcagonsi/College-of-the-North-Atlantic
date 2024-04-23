@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    width: 550px;
+    margin: 0 auto;
+    padding: 1em;
+    
+    }
+h2 {
+    position:relative;
+    margin: auto;
+    color: Red;
+    font-size:large;
+    text-align: center;
+    padding: 50px;
+}
+div.login_block {
+    
+    width: 100%;
+    length: 100%;
+    border-style: dotted;
+    border-width: 1px;
+    box-shadow: 0cap;
+    padding : 10px;
+    
+}
+
+div.button {
+    width: 80%;
+    length : 45%;
+    align-self: center;
+    background-color: green;
+    align-items: center;
+    
+}
+
+button {
+    size: 15%;
+    position:relative;
+    color: blueviolet;
+    
+}
+button:hover {
+    size: 100px;
+}
