@@ -175,6 +175,7 @@ END //
 
 delimiter ;
 
+
 -- CREATES THE TRIGGER FOR CREATING ONLINE BANKING ACCOUNT ONCE A NEW ONLINE ACCOUNT INFORMATION IS INSERTED TO THE ONLINE BANK ACCOUNT TABLE
 
 drop trigger if exists create_online_account;
@@ -201,4 +202,14 @@ BEGIN
 END //
 
 delimiter ;
+
+-- CREATES THE CUSTOMER_ACCOUNTS_ACCOUNT VIEW 
+drop view if exists Customer_Accounts_Account;
+
+CREATE VIEW Customer_Accounts_Account AS
+SELECT customer.ID ,customer.LastName, customer.PhoneNumber, accounts.ID as accounts_id, accounts.OnlineBankingAcct_ID, account.AccountNumber, account.AccountType_ID, account.Active
+FROM accounts 
+join account on accounts.id = account.Accounts_ID
+join customer on accounts.Customer_ID = customer.ID;
+
 

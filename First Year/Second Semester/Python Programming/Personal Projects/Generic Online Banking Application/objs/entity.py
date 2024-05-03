@@ -2,6 +2,9 @@ from dataclasses import dataclass
 from datetime import datetime
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+import mysql.connector as db
+con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='bankdb')
+c = con.cursor()
 @dataclass
 class Bank:
     _BankName: str
@@ -29,22 +32,24 @@ class Bank:
     def accounts(self):
         return self._Accounts
 
-    def __post_init__(self):
-        self._Accounts = readaccts()
-        self._Customers = readcustomer()
-        self._Employees = readEmployees()
+    # def __post_init__(self):
+    #     self._Accounts = readaccts()
+    #     self._Customers = readcustomer()
+    #     self._Employees = readEmployees()
 
     def validateCustomersAccount(self,value):
-        if value in self._Accounts # this is to validate for creating an online account or logging in
-            return True
+        pass
+        # if value in self._Accounts # this is to validate for creating an online account or logging in
+        #     return True
     def validateAccountNumber(self,value):
-        if value in self._Accounts: # this is to validate customer account exists for the external client to return the name of the client during transactions
+        pass
+       # if value in self._Accounts: # this is to validate customer account exists for the external client to return the name of the client during transactions
 
 
 @dataclass
 class AccountType:
     _ID:int
-    _Name:str
+    _Name = ''
 
     @property
     def id(self):
@@ -53,8 +58,13 @@ class AccountType:
     def name(self):
         return self._Name
 
-    def getTypeName(self):
-        return self._Name # this should get the Account name based on the ID
+    def __post_init__(self):
+        query = 'select name from accounttype where id = %s ;'
+        c.execute(query, (self.id,))
+        row = c.fetchone()
+        self._Name = row[0]
+        con.close()
+
 
 @dataclass
 class Accounts:
@@ -64,15 +74,20 @@ class Accounts:
     _OnlineAccountID= 0 #default if doesnt have an onlinebankingaccount on the database
 
     def __post_init__(self):
+        pass
         #should initialize the _Accounts to get all accounts with respective customerID and AccountsID from the database
 
     def getTotalBalance(self):
+        pass
         # should calculate total balance of all relevant accounts
     def showAccounts(self):
+        pass
         #shows all the accounts owned by the customer
     def selectAccount(self, value):
+        pass
         #selects the desired account to be used for debit transactioins
     def transactionAccount(self,value):
+        pass
         #selects the desired account for internal transfer transactions
 
 
@@ -80,10 +95,13 @@ class Accounts:
 @dataclass
 class Account:
     _AccountNumber:int # this is written in the database as union of the accountsID and any random generated 4 numbers
+    _Balance: float
+    _Active: bool
+    _AccountType: AccountType
     _AccountsID: int
-    _AccountType:AccountType
-    _Balance:float
-    _Active:bool
+
+
+
 
     @property
     def accountNumber(self):
@@ -110,9 +128,11 @@ class Account:
     def debitAccount(self,value):
         self._Balance -= value
     def updateBalance(self):
+        pass
         #should write balance to the database
     def showTransactionHistory(self):
-        Transactons = # instantiate from the Transaction history class based on the AccountNumber
+        pass
+        #Transactons = # instantiate from the Transaction history class based on the AccountNumber
 
 
 @dataclass
