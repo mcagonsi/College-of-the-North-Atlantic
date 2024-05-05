@@ -93,7 +93,7 @@ DROP TABLE IF EXISTS `Account` ;
 
 CREATE TABLE IF NOT EXISTS `Account` (
   `AccountNumber` INT NOT NULL AUTO_INCREMENT,
-  `Balance` INT NOT NULL,
+  `Balance` DECIMAL(9,2) NOT NULL,
   `Active` TINYINT NOT NULL,
   `AccountType_ID` INT NOT NULL,
   `Accounts_ID` INT NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `Transaction` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `accountID` INT NOT NULL,
   `type` VARCHAR(10) NOT NULL,
-  `Amount` INT NOT NULL,
+  `Amount` DECIMAL(9,2) NOT NULL,
   `DateAndTime` DATE NOT NULL,
   `FromBankName` VARCHAR(45) NOT NULL,
   `FromName` VARCHAR(45) NOT NULL,
@@ -133,16 +133,15 @@ CREATE TABLE IF NOT EXISTS `Transaction` (
   `ToName` VARCHAR(45) NOT NULL,
   `ToAccountNumber` VARCHAR(45) NOT NULL,
   `Status` VARCHAR(45) NOT NULL,
-  `Account_AccountNumber` INT NOT NULL,
-  PRIMARY KEY (`ID`, `Account_AccountNumber`),
+  PRIMARY KEY (`ID`, `accountID`),
   CONSTRAINT `fk_Transaction_Account1`
-    FOREIGN KEY (`Account_AccountNumber`)
+    FOREIGN KEY (`accountID`)
     REFERENCES `Account` (`AccountNumber`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Transaction_Account1_idx` ON `Transaction` (`Account_AccountNumber` ASC) VISIBLE;
+CREATE INDEX `fk_Transaction_Account1_idx` ON `Transaction` (`accountID` ASC) VISIBLE;
 
 
 -- INSERTS REQUIRED VALUES FOR THE ACCOUNT TYPE TABLE
@@ -212,4 +211,118 @@ FROM accounts
 join account on accounts.id = account.Accounts_ID
 join customer on accounts.Customer_ID = customer.ID;
 
+-- CREATES THE TRIGGER TO CLOSE CUSTOMER ACCOUNT AND DELETE CUSTOMER FROM THE DATABASE IF CUSTOMER WISHES TO CLOSE ACCOUNT
 
+
+drop trigger if exists close_customer_account;
+
+delimiter //
+create trigger close_customer_account
+	before delete on customer
+	for each row
+BEGIN
+
+	
+	declare customer_id int;
+	declare onlinebankid int default null;
+    declare accountsid int;
+    declare counter int default 1;
+    declare accountNumber int;
+    
+	
+    select ID into customer_id from customer where ID = old.ID;
+	select accounts_id into accountsid from customer_accounts_account where ID = customer_id;
+    select OnlineBankingAcct_ID into onlinebankid from customer_accounts_account where ID = customer_id;
+    
+    delete from account where Accounts_ID = accounts_id and AccountType_ID =1;
+    delete from account where Accounts_ID = accounts_id and AccountType_ID =2;
+    delete from account where Accounts_ID = accounts_id and AccountType_ID =3;
+    
+    delete from accounts where ID = accountsid;
+    
+    
+    IF onlinebankid is not null then
+		delete from onlinebankingacct where ID = onlinebankid;
+	END IF;
+	
+END //
+
+delimiter ;
+
+-- CREATES A TRIGGER TO GENERATE AN ACCOUNT NUMBER WHEN A NEW FINANCE ACCOUNT(INVESTMENT OR SAVINGS) IS CREATED FOR A CUSTOMER
+
+drop trigger if exists generate_account_number;
+
+delimiter //
+create trigger generate_account_number
+	before insert on account
+	for each row
+BEGIN
+
+    declare account_number int;
+    
+	set account_number = concat(new.accounts_id,'',FLOOR(RAND() * (9999 - 1000 + 1)) + 1000);
+    set new.accountNumber = account_number;
+	
+END //
+
+delimiter ;
+
+-- CREATES THE TRIGGER FOR ALL DEPOSIT TRANSACTIONS TO RECORD INTO THE DATABASE
+
+
+drop trigger if exists deposit_into_account;
+
+delimiter //
+create trigger deposit_into_account
+	before insert on transaction
+	for each row
+BEGIN
+	declare accountName varchar(10);
+    declare accttype int;
+    
+    
+    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
+    select Name into accountName from AccountType where ID = accttype;
+    
+	if new.Type = 'DEPOSIT' THEN
+		set new.accountID = new.ToAccountNumber;
+        set new.Status = 'SUCCESSFUL';
+        set new.DateAndTime = current_timestamp();
+        set new.FromBankName = 'N/A';
+        set new.FromAccountNumber = 'N/A';
+        set new.ToBankName = 'CUSTOMER';
+        set new.ToName = accountName;
+	end if;
+END //
+
+delimiter ;
+
+-- CREATES THE TRIGGER FOR ALL WITHDRAWAL TRANSACTION TO RECORD INTO THE DATABASE
+
+drop trigger if exists withdraw_from_account;
+
+delimiter //
+create trigger withdraw_from_account
+	before insert on transaction
+	for each row
+BEGIN
+	declare accountName varchar(10);
+    declare accttype int;
+    
+    
+    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
+    select Name into accountName from AccountType where ID = accttype;
+    
+	if new.Type = 'WITHDRAWAL' THEN
+		set new.accountID = new.FromAccountNumber;
+        set new.Status = 'SUCCESSFUL';
+        set new.DateAndTime = current_timestamp();
+        set new.ToBankName = 'N/A';
+        set new.ToAccountNumber = 'N/A';
+        set new.FromBankName = 'CUSTOMER';
+        set new.FromName = accountName;
+	end if;
+END //
+
+delimiter ;

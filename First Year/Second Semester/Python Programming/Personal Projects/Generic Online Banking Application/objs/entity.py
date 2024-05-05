@@ -58,13 +58,14 @@ class AccountType:
     def name(self):
         return self._Name
 
-    def __post_init__(self):
-        query = 'select name from accounttype where id = %s ;'
-        c.execute(query, (self.id,))
-        row = c.fetchone()
-        self._Name = row[0]
-        con.close()
 
+    def __post_init__(self):
+        query = 'select * from accounttype;'
+        c.execute(query)
+        types = c.fetchall()
+        for t in types:
+            if self._ID == t[0]:
+                self._Name = t[1]
 
 @dataclass
 class Accounts:
@@ -231,6 +232,8 @@ class Transfer(Transaction):
 
 
 
+def main():
+    pass
 
 
 
@@ -238,4 +241,5 @@ class Transfer(Transaction):
 
 
 
-
+if __name__ == '__main__':
+    main()
