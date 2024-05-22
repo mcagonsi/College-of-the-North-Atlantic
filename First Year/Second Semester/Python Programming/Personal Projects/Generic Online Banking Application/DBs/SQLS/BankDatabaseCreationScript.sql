@@ -40,6 +40,24 @@ CREATE TABLE IF NOT EXISTS `AccountType` (
 ENGINE = InnoDB;
 
 
+-- CREATES THE ACCOUNTS TABLE
+
+
+DROP TABLE IF EXISTS `Accounts` ;
+
+CREATE TABLE IF NOT EXISTS `Accounts` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Customer_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  CONSTRAINT `fk_Accounts_Customer1`
+    FOREIGN KEY (`Customer_ID`)
+    REFERENCES `Customer` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+CREATE INDEX `fk_Accounts_Customer1_idx` ON `Accounts` (`Customer_ID` ASC) VISIBLE;
 
 -- CREATES THE ONLINE BANKING ACCOUNT TABLE
 
@@ -50,40 +68,19 @@ CREATE TABLE IF NOT EXISTS `OnlineBankingAcct` (
   `Email` VARCHAR(40) NOT NULL,
   `Password` VARCHAR(100) NOT NULL,
   `customerID`INT NOT NULL,
+  `AccountsID` INT NULL,
   
   PRIMARY KEY (`ID`),
   CONSTRAINT cust_onlinebankID_fk 
-  foreign key (`customerID`) references `Customer`(`ID`))
+  foreign key (`customerID`) references `Customer`(`ID`),
+  CONSTRAINT online_accountsID_fk
+  foreign key (`AccountsID`) references `Accounts`(`ID`))
+  
 ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `Email_UNIQUE` ON `OnlineBankingAcct` (`Email` ASC) VISIBLE;
 
 
--- CREATES THE ACCOUNTS TABLE
-
-
-DROP TABLE IF EXISTS `Accounts` ;
-
-CREATE TABLE IF NOT EXISTS `Accounts` (
-  `ID` INT NOT NULL AUTO_INCREMENT,
-  `OnlineBankingAcct_ID` INT NULL,
-  `Customer_ID` INT NOT NULL,
-  PRIMARY KEY (`ID`),
-  CONSTRAINT `fk_Accounts_OnlineBankingAcct1`
-    FOREIGN KEY (`OnlineBankingAcct_ID`)
-    REFERENCES `OnlineBankingAcct` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Accounts_Customer1`
-    FOREIGN KEY (`Customer_ID`)
-    REFERENCES `Customer` (`ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-CREATE INDEX `fk_Accounts_OnlineBankingAcct1_idx` ON `Accounts` (`OnlineBankingAcct_ID` ASC) VISIBLE;
-
-CREATE INDEX `fk_Accounts_Customer1_idx` ON `Accounts` (`Customer_ID` ASC) VISIBLE;
 
 
 
@@ -136,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `Transaction` (
   PRIMARY KEY (`ID`, `accountID`),
   CONSTRAINT `fk_Transaction_Account1`
     FOREIGN KEY (`accountID`)
-    REFERENCES `Account` (`AccountNumber`)
+    REFERENCES `Account` (`Accounts_ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -168,45 +165,19 @@ BEGIN
 	set accountsid = FLOOR(RAND() * (9999 - 1000 + 1)) + 1000;
 	set account_number = concat(accountsid,'',FLOOR(RAND() * (9999 - 1000 + 1)) + 1000);
 	
-	insert into Accounts (ID,OnlineBankingAcct_ID,Customer_ID) values (accountsid,Null,customer_id);
+	insert into Accounts (ID,Customer_ID) values (accountsid,customer_id);
 	insert into Account values (account_number,0,True,1,accountsid);
 END //
 
 delimiter ;
 
 
--- CREATES THE TRIGGER FOR CREATING ONLINE BANKING ACCOUNT ONCE A NEW ONLINE ACCOUNT INFORMATION IS INSERTED TO THE ONLINE BANK ACCOUNT TABLE
-
-drop trigger if exists create_online_account;
-
-delimiter //
-create trigger create_online_account
-	after insert on onlinebankingacct
-	for each row
-BEGIN
-
-	
-	declare customer_id int;
-	declare onlinebankid int;
-    declare accountsid int;
-	
-    select customerID into customer_id from onlinebankingacct where ID = new.ID;
-	select ID into accountsid from accounts where Customer_ID = customer_id;
-    select ID into onlinebankid from onlinebankingacct where ID = new.ID;
-	
-	
-	
-	update Accounts set OnlineBankingAcct_ID = onlinebankid where ID = accountsid;
-	
-END //
-
-delimiter ;
 
 -- CREATES THE CUSTOMER_ACCOUNTS_ACCOUNT VIEW 
 drop view if exists Customer_Accounts_Account;
 
 CREATE VIEW Customer_Accounts_Account AS
-SELECT customer.ID ,customer.LastName, customer.PhoneNumber, accounts.ID as accounts_id, accounts.OnlineBankingAcct_ID, account.AccountNumber, account.AccountType_ID, account.Active
+SELECT customer.ID ,customer.LastName, customer.PhoneNumber, accounts.ID as accounts_id, account.AccountNumber, account.AccountType_ID, account.Active
 FROM accounts 
 join account on accounts.id = account.Accounts_ID
 join customer on accounts.Customer_ID = customer.ID;
@@ -268,6 +239,88 @@ END //
 
 delimiter ;
 
+-- CREATES THE TRIGGER FOR ALL TRANSFER TRANSACTIONS TO RECORD INTO THE DATABASE
+
+drop trigger if exists transfer_transactions;
+
+delimiter //
+create trigger transfer_transactions
+	before insert on transaction
+	for each row
+BEGIN
+	declare from_accountName varchar(10);
+    declare from_accttype int;
+    declare to_accountName varchar(10);
+    declare to_accttype int;
+    declare from_balance Decimal(9,2);
+    declare to_balance Decimal(9,2);
+    
+    
+    select AccountType_ID into from_accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
+    select Name into from_accountName from AccountType where ID = from_accttype;
+    select AccountType_ID into to_accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
+    select Name into to_accountName from AccountType where ID = to_accttype;
+    
+    select balance into from_balance from account where AccountNumber=new.FromAccountNumber;
+    select balance into to_balance from account where AccountNumber = new.ToAccountNumber;
+    
+    
+    
+    
+	if new.Type = 'TRANSFER' THEN
+        set new.Status = 'SUCCESSFUL';
+        set new.DateAndTime = current_timestamp();
+        set new.ToBankName = 'INTERNAL';
+        set new.FromBankName = 'INTERNAL';
+        set new.FromName = from_accountName;
+        set new.ToName = to_accountName;
+        update account set balance = from_balance - new.amount where AccountNumber = new.FromAccountNumber;
+		update account set balance = to_balance + new.amount where AccountNumber = new.ToAccountNumber;
+	end if;
+    
+   
+END //
+
+delimiter ;
+
+-- CREATES THE TRIGGER FOR ALL TRANSFER DEPOSIT TRANSACTIONS TO RECORD INTO THE DATABASE
+
+drop trigger if exists deposit_transfer_transactions;
+
+delimiter //
+create trigger deposit_transfer_transactions
+	before insert on transaction
+	for each row
+BEGIN
+	declare from_accountName varchar(10);
+    declare from_accttype int;
+    declare to_accountName varchar(10);
+    declare to_accttype int;
+    
+    
+    
+    select AccountType_ID into from_accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
+    select Name into from_accountName from AccountType where ID = from_accttype;
+    select AccountType_ID into to_accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
+    select Name into to_accountName from AccountType where ID = to_accttype;
+    
+    
+    
+    
+	if new.Type = 'T_DEPOSIT' THEN
+        set new.Status = 'SUCCESSFUL';
+        set new.DateAndTime = current_timestamp();
+        set new.ToBankName = 'INTERNAL';
+        set new.FromBankName = 'INTERNAL';
+        set new.FromName = from_accountName;
+        set new.ToName = to_accountName;
+	end if;
+    
+   
+END //
+
+delimiter ;
+
 -- CREATES THE TRIGGER FOR ALL DEPOSIT TRANSACTIONS TO RECORD INTO THE DATABASE
 
 
@@ -286,7 +339,6 @@ BEGIN
     select Name into accountName from AccountType where ID = accttype;
     
 	if new.Type = 'DEPOSIT' THEN
-		set new.accountID = new.ToAccountNumber;
         set new.Status = 'SUCCESSFUL';
         set new.DateAndTime = current_timestamp();
         set new.FromBankName = 'N/A';
@@ -315,14 +367,36 @@ BEGIN
     select Name into accountName from AccountType where ID = accttype;
     
 	if new.Type = 'WITHDRAWAL' THEN
-		set new.accountID = new.FromAccountNumber;
         set new.Status = 'SUCCESSFUL';
         set new.DateAndTime = current_timestamp();
-        set new.ToBankName = 'N/A';
-        set new.ToAccountNumber = 'N/A';
+        set new.ToBankName = 'N.A';
+        set new.ToAccountNumber = 'N.A';
         set new.FromBankName = 'CUSTOMER';
         set new.FromName = accountName;
 	end if;
+END //
+
+delimiter ;
+
+
+
+
+-- CREATES A TRIGGER THAT CREATES AN ONLINE BANKING ACCOUNT WHEN NEW INFO IS INSERTED
+
+
+drop trigger if exists create_online_account_accounts;
+
+delimiter //
+create trigger create_online_account_accounts
+	before insert on onlinebankingacct
+	for each row
+BEGIN
+	declare accountsID int;
+	
+    select ID into accountsID from accounts where Customer_ID = new.customerID;
+    set new.AccountsID = accountsID;
+    
+    
 END //
 
 delimiter ;

@@ -66,7 +66,11 @@ class Person:
 
     @property
     def FullAddress(self):
-        return self._StreetAddress + ', ' + self._City + ', ' + self._Country + ', ' + self._PostalCode
+        return self._StreetAddress + ', \n' + self._City + ', \n' + self._Country + ', ' + self._PostalCode
+
+    @property
+    def FullName(self):
+        return self._FirstName + ' ' + self._LastName
 
 
 @dataclass
@@ -93,22 +97,16 @@ class Employee(Person):
 @dataclass
 class Customer(Person):
     _CustomerID: int
-    _OnlineBankingID:int
 
-    @property
-    def OnlineBankingID(self):
-        return self._OnlineBankingID
     @property
     def CustomerID(self):
         return self._CustomerID
-    @OnlineBankingID.setter
-    def OnlineBankingID(self, value):
-        self._OnlineBankingID = value
+
 
 
 @dataclass
 class ExternalClient:
-    _Bank: str
+    _Bank: str # this will have to take a bank class as the input.
     _FullName = ''
     _AccountNumber:int
     _Amount:float

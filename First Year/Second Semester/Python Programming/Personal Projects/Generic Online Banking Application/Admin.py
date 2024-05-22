@@ -3,11 +3,13 @@ from objs import entity as e
 import mysql.connector as db
 from datetime import datetime
 import time
-DATEFORMAT = '%Y-%m-%d'
-con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='bankdb')
-c = con.cursor()
-# always use c.fetchall() to buffer the cursor to avoid internal error: unreadable result from sql
 
+DATEFORMAT = '%Y-%m-%d'
+con = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
+c = con.cursor()
+
+
+# always use c.fetchall() to buffer the cursor to avoid internal error: unreadable result from sql
 
 
 def openCustomerAccount():
@@ -28,20 +30,22 @@ def openCustomerAccount():
 
     # initializing the customer class to write to database
 
-    C = a.Customer(fname,lname,sex,dob,relationship,phone,stateOfOrigin,countryofOrigin,streetAddress,town,country,postalcode,0,0)
+    C = a.Customer(fname, lname, sex, dob, relationship, phone, stateOfOrigin, countryofOrigin, streetAddress, town,
+                   country, postalcode, 0)
 
-    parameters = (C.FirstName,C.LastName, C.Gender, C.DateOfBirth,C.Relationship, C.PhoneNumber, C.StateOfOrigin, C.CountryOfOrigin,C.StreetAddress, C.City, C.Country,C.PostalCode)
+    parameters = (
+    C.FirstName, C.LastName, C.Gender, C.DateOfBirth, C.Relationship, C.PhoneNumber, C.StateOfOrigin, C.CountryOfOrigin,
+    C.StreetAddress, C.City, C.Country, C.PostalCode)
 
     query = 'insert into customer values (default,%s, %s,%s, %s,%s, %s,%s, %s,%s, %s,%s,%s);'
 
-    c.execute(query,parameters)
+    c.execute(query, parameters)
     con.commit()
-
 
     # Note that by default upon creation of a customer account only a chequing account is opened
     acct_type = e.AccountType(1).name
     getaccountNumber = '''Select AccountNumber from Customer_Accounts_Account where LastName=%s and PhoneNumber=%s and AccountType_ID=1'''
-    c.execute(getaccountNumber,(C.LastName,C.PhoneNumber))
+    c.execute(getaccountNumber, (C.LastName, C.PhoneNumber))
     accountNumber = c.fetchone()[0]
     time.sleep(2)
     print()
@@ -59,29 +63,31 @@ def openCustomerAccount():
     print('PLEASE PROVIDE THE ACCOUNT NUMBER GENERATED HERE WHEN LOGGING INTO Y0U ONLINE BANK ACCOUNT')
     print()
 
-def checkCustomerAccount(lname,phone):
+
+def checkCustomerAccount(lname, phone):
     print("ACCOUNT DETAILS")
-    print('-'*40)
+    print('-' * 40)
     print()
 
     getaccountsID = "select accounts_id from customer_accounts_account where LastName=%s and PhoneNumber=%s"
 
-    c.execute(getaccountsID,(lname,phone))
+    c.execute(getaccountsID, (lname, phone))
     accountsID = c.fetchone()
 
     c.fetchall()
     accounts = 'select * from account where Accounts_ID=%s order by AccountType_ID asc;'
-    c.execute(accounts,(accountsID[0],))
+    c.execute(accounts, (accountsID[0],))
     accountDetails = c.fetchall()
 
     for acct in accountDetails:
-        acct = e.Account(acct[0],acct[1],acct[2],e.AccountType(acct[3]).name,acct[4])
+        acct = e.Account(acct[0], acct[1], acct[2], e.AccountType(acct[3]).name, acct[4])
         if acct.active == 1:
             print(f"{'ACCOUNT NUMBER: ':<15} {acct.accountNumber:>10}")
             print(f"{'ACCOUNT : ':<15} {acct.accountType:>11}")
             print(f"{'ACCOUNT BALANCE: ':<15} {acct.balance:>9}")
             print()
             time.sleep(2)
+
 
 def closeCustomerAccount(customerID):
     print("CLOSING CUSTOMER ACCOUNT, PLEASE PROVIDE DATE OF BIRTH TO CONFIRM")
@@ -94,17 +100,17 @@ def closeCustomerAccount(customerID):
             print()
             break
         else:
-            #gets customer date of birth from database to verify entry
+            # gets customer date of birth from database to verify entry
             getdob = 'select DOB from customer where ID = %s'
-            c.execute(getdob,(customerID[0],))
+            c.execute(getdob, (customerID[0],))
             customer_dob = c.fetchone()
 
             if customer_dob == None:
                 print('DATE OF BIRTH NOT CORRECT')
                 print()
-            elif datetime.strftime(customer_dob[0],DATEFORMAT) == dob:
+            elif datetime.strftime(customer_dob[0], DATEFORMAT) == dob:
                 closeaccount = 'delete from customer where ID = %s'
-                c.execute(closeaccount,(customerID[0],))
+                c.execute(closeaccount, (customerID[0],))
                 con.commit()
                 time.sleep(2)
                 print('CUSTOMER ACCOUNT CLOSED SUCCESSFULLY')
@@ -113,8 +119,9 @@ def closeCustomerAccount(customerID):
             else:
                 print('DATE OF BIRTH NOT CORRECT ')
                 print()
-def updateCustomerName(customerID):
 
+
+def updateCustomerName(customerID):
     if customerID == None:
         print('CUSTOMER ACCOUNT NOT FOUND')
         print()
@@ -123,12 +130,14 @@ def updateCustomerName(customerID):
         nFName = input("New First Name: ").upper()
         nLName = input("New Last Name: ").upper()
         print()
-        updateName= 'update customer set FirstName = %s , LastName = %s where ID=%s;'
-        c.execute(updateName, (nFName,nLName,customerID[0]))
+        updateName = 'update customer set FirstName = %s , LastName = %s where ID=%s;'
+        c.execute(updateName, (nFName, nLName, customerID[0]))
         con.commit()
         time.sleep(2)
         print('CUSTOMER NAME UPDATED SUCCESSFULLY')
         print()
+
+
 def updateCustomerAddress(customerID):
     if customerID == None:
         print('CUSTOMER ACCOUNT NOT FOUND')
@@ -141,11 +150,13 @@ def updateCustomerAddress(customerID):
         nPostalCode = input("NEW POSTAL CODE: ").upper()
         print()
         updateAddress = 'update customer set HouseAddress= %s , Town_City = %s , CountryOfResidence = %s , PostalCode = %s where ID=%s;'
-        c.execute(updateAddress, (nHouseAddress,nCity,nCountry,nPostalCode, customerID[0]))
+        c.execute(updateAddress, (nHouseAddress, nCity, nCountry, nPostalCode, customerID[0]))
         con.commit()
         time.sleep(2)
         print('CUSTOMER ADDRESS UPDATED SUCCESSFULLY')
         print()
+
+
 def updateCustomerPhone(customerID):
     if customerID == None:
         print('CUSTOMER ACCOUNT NOT FOUND')
@@ -160,7 +171,9 @@ def updateCustomerPhone(customerID):
         time.sleep(2)
         print('CUSTOMER PHONE UPDATED SUCCESSFULLY')
         print()
-def updateAccountInformation(lname,phone):
+
+
+def updateAccountInformation(lname, phone):
     c.fetchall()
     # gets the customerID from database
     getcustomerID = 'select ID from customer_accounts_account where LastName=%s and PhoneNumber=%s'
@@ -192,7 +205,9 @@ def updateAccountInformation(lname,phone):
                 print()
         except ValueError:
             print('INVALID INPUT')
-def depositIntoAccount():
+
+
+def depositIntoAccount(accountsID):
     print('DEPOSIT TRANSACTION')
     try:
         print()
@@ -207,6 +222,7 @@ def depositIntoAccount():
         getcustomerID = 'select ID from customer_accounts_account where AccountNumber=%s'
         c.execute(getcustomerID, (depositAccountNumber,))
         customerID = c.fetchone()
+
         if customerID == None:
             print('CUSTOMER ACCOUNT NOT FOUND')
             print()
@@ -227,17 +243,17 @@ def depositIntoAccount():
 
                     if depositAmount > 0:
                         getCurrentbalance = 'select Balance from account where AccountNumber=%s'
-                        c.execute(getCurrentbalance,(depositAccountNumber,))
+                        c.execute(getCurrentbalance, (depositAccountNumber,))
                         currentBalance = c.fetchone()
                         newBalance = depositAmount + float(currentBalance[0])
                         deposit = 'update account set Balance = %s where AccountNumber=%s'
-                        c.execute(deposit, (newBalance,depositAccountNumber))
+                        c.execute(deposit, (newBalance, depositAccountNumber))
                         con.commit()
                         print()
                         print('PROCESSING...')
                         time.sleep(3)
-                        recordTransaction = "insert into transaction (ID, type, Amount, FromName, ToAccountNumber) values (default,'DEPOSIT',%s,%s,%s)"
-                        c.execute(recordTransaction, (depositAmount, clientName, depositAccountNumber))
+                        recordTransaction = "insert into transaction (ID, type, Amount, FromName, ToAccountNumber, accountID) values (default,'DEPOSIT',%s,%s,%s,%s)"
+                        c.execute(recordTransaction, (depositAmount, clientName, depositAccountNumber,accountsID))
                         con.commit()
                         print()
                         print('DEPOSIT TRANSACTION DONE SUCCESSFULLY')
@@ -250,7 +266,8 @@ def depositIntoAccount():
         print('INVALID INPUT')
         print()
 
-def withdrawFromAccount():
+
+def withdrawFromAccount(accountsID):
     print('WITHDRAWAL TRANSACTION')
     try:
         print()
@@ -289,15 +306,15 @@ def withdrawFromAccount():
                     c.execute(getCurrentbalance, (withdrawalAccountNumber,))
                     currentBalance = c.fetchone()
                     if float(currentBalance[0]) > 0 and float(currentBalance[0]) > withdrawalAmount:
-                        newBalance =  float(currentBalance[0]) - withdrawalAmount
+                        newBalance = float(currentBalance[0]) - withdrawalAmount
                         deposit = 'update account set Balance = %s where AccountNumber=%s'
                         c.execute(deposit, (newBalance, withdrawalAccountNumber))
                         con.commit()
                         print()
                         print('PROCESSING...')
                         time.sleep(3)
-                        recordTransaction = "insert into transaction (ID, type, Amount, ToName, FromAccountNumber) values (default,'WITHDRAWAL',%s,%s,%s)"
-                        c.execute(recordTransaction, (withdrawalAmount, fullName, withdrawalAccountNumber))
+                        recordTransaction = "insert into transaction (ID, type, Amount, ToName, FromAccountNumber,accountID) values (default,'WITHDRAWAL',%s,%s,%s,%s)"
+                        c.execute(recordTransaction, (withdrawalAmount, fullName, withdrawalAccountNumber,accountsID))
                         con.commit()
                         print()
                         print('WITHDRAWAL COMPLETED')
@@ -310,7 +327,9 @@ def withdrawFromAccount():
     except ValueError:
         print('INVALID INPUT')
 
-    #should be able to update name(fname and lname), address(house address, town,country, postal code) and phone
+    # should be able to update name(fname and lname), address(house address, town,country, postal code) and phone
+
+
 def manageCustomerAccount():
     print()
     print('MANAGE CUSTOMER ACCOUNT')
@@ -323,7 +342,8 @@ def manageCustomerAccount():
         getaccountsID = "select accounts_id from customer_accounts_account where LastName=%s and PhoneNumber=%s"
 
         c.execute(getaccountsID, (lname, phone))
-        accountsID = c.fetchone()
+        accountsID = c.fetchall()
+        print(accountsID)
 
         if accountsID == None:
             print('CUSTOMER ACCOUNT NOT FOUND')
@@ -335,18 +355,18 @@ def manageCustomerAccount():
     while True:
         try:
             print()
-            choice =int(input('Manage Account Option: '))
+            choice = int(input('Manage Account Option: '))
             print()
             if choice == 1:
 
                 checkCustomerAccount(lname, phone)
 
             elif choice == 2:
-                depositIntoAccount()
+                depositIntoAccount(accountsID[0][0])
             elif choice == 3:
-                 withdrawFromAccount()
+                withdrawFromAccount(accountsID[0][0])
             elif choice == 4:
-                updateAccountInformation(lname,phone)
+                updateAccountInformation(lname, phone)
             elif choice == 5:
                 break
             else:
@@ -356,13 +376,15 @@ def manageCustomerAccount():
             print('INVALID INPUT')
             print()
 
+
 def title():
     print("GENERIC BANKING TELLER/ADMIN SOFTWARE")
-    print('*'*40)
+    print('*' * 40)
     print('Note: This a simulated banking application')
     print('Ensure You have an account created first and note down the account number')
-    print('*'*40)
+    print('*' * 40)
     print()
+
 
 def manageOptions():
     print()
@@ -373,6 +395,8 @@ def manageOptions():
     print('4. Update Customer Personal Details')
     print('5. Back')
     print()
+
+
 def menu():
     print('MENU OPTIONS:')
     print('1. Open A New Account ')
@@ -401,6 +425,7 @@ def main():
         except ValueError:
             print()
             print('INVALID INPUT')
+
 
 if __name__ == '__main__':
     main()

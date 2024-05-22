@@ -1,10 +1,15 @@
 from dataclasses import dataclass
 from datetime import datetime
+import sys
+sys.path.append("..")
+from DBs import writeDB as wdb
+from DBs import readDB as rdb
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 import mysql.connector as db
 con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='bankdb')
 c = con.cursor()
+
 @dataclass
 class Bank:
     _BankName: str
@@ -60,6 +65,7 @@ class AccountType:
 
 
     def __post_init__(self):
+
         query = 'select * from accounttype;'
         c.execute(query)
         types = c.fetchall()
@@ -72,24 +78,33 @@ class Accounts:
     _ID:int
     _Accounts = {}
     _customerID:int
-    _OnlineAccountID= 0 #default if doesnt have an onlinebankingaccount on the database
+
 
     def __post_init__(self):
-        pass
+        CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
+        C = CON.cursor()
+
+        getaccounts = 'select * from account where Accounts_ID = %s '
+        C.execute(getaccounts, (self._ID,))
+        Accounts = C.fetchall()
+        for a in Accounts:
+            if a[2] ==1:
+                self._Accounts[a[0]] = Account(a[0],a[1],a[2],AccountType(a[3]),a[4])
+        CON.close()
+
         #should initialize the _Accounts to get all accounts with respective customerID and AccountsID from the database
 
     def getTotalBalance(self):
         pass
         # should calculate total balance of all relevant accounts
     def showAccounts(self):
-        pass
+        return self._Accounts
+
         #shows all the accounts owned by the customer
     def selectAccount(self, value):
         pass
         #selects the desired account to be used for debit transactioins
-    def transactionAccount(self,value):
-        pass
-        #selects the desired account for internal transfer transactions
+
 
 
 
@@ -125,25 +140,34 @@ class Account:
         return locale.currency(self._Balance,grouping=True)
 
     def creditAccount(self,value):
-        self._Balance += value
+        cur_bal = float(self._Balance)
+        self._Balance =cur_bal+ value
     def debitAccount(self,value):
-        self._Balance -= value
-    def updateBalance(self):
-        pass
-        #should write balance to the database
+        cur_bal = float(self._Balance)
+        self._Balance = cur_bal - value
+
     def showTransactionHistory(self):
-        pass
+        rdb.getTransactionHistory(self)
+
         #Transactons = # instantiate from the Transaction history class based on the AccountNumber
 
 
 @dataclass
 class Transaction:
-    _transactionID:int
-    _type:str
-    _Amount:float
-    _Date:datetime
-    _status:str
-    _AccountID:int # based on the account number
+    _transactionID :int
+    _AccountID : int
+    _type :str
+    _Amount :float
+    _Date :datetime
+    _FromBankName:str
+    _From :str
+    _FromAccountNumber:int
+    _ToBankName: str
+    _To:str
+    _ToAccountNumber:int
+    _status : str
+
+    # based on the account number
 
     @property
     def transactionID(self):
@@ -166,73 +190,95 @@ class Transaction:
     def accountID(self):
         return self._AccountID
 
-
-
-@dataclass
-class Debit_Credit(Transaction):
-    _SenderBankName:str
-    _SenderName:str # customers account name
-    _SenderAccountNumber:int
-    _RecipientBankName:str
-    _RecipientName = None # set based on the clients name verified from the bank
-    _RecipientAccountNumber:int
-
-    @property
-    def senderBankName(self):
-        return self._SenderBankName
-    @property
-    def senderName(self):
-        return self._SenderName
-    @property
-    def senderAccountNumber(self):
-        return self._SenderAccountNumber
-    @property
-    def recipientBankName(self):
-        return self._RecipientBankName
-    @property
-    def recipientName(self):
-        return self._RecipientName
-    @property
-    def recipientAccountNumber(self):
-        return self._RecipientAccountNumber
-
-
-@dataclass
-class Transfer(Transaction):
-    _FromAccountType:AccountType
-    _FromBankName:str
-    _FromAccountNumber:int
-    _ToAccountType:AccountType
-    _ToBankName:str
-    _ToAccountNumber:int
-
-    @property
-    def fromAccountType(self):
-        return self._FromAccountType
-
     @property
     def fromBankName(self):
         return self._FromBankName
+
+    @property
+    def From(self):
+        return self._From
 
     @property
     def fromAccountNumber(self):
         return self._FromAccountNumber
 
     @property
-    def toAccountType(self):
-        return self._ToAccountType
-    @property
     def toBankName(self):
         return self._ToBankName
+
+    @property
+    def to(self):
+        return self._To
+
     @property
     def toAccountNumber(self):
         return self._ToAccountNumber
 
+@dataclass
+class TransactionHistory:
+    _accountsID:int
+    _history = {}
 
+    def __post_init__(self):
+        c.fetchall()
+        trnsHistory = rdb.getTransactionHistory(self._accountsID)
+        if trnsHistory is not None:
+            for t in trnsHistory:
+                self._history[t.transactionID] = t
+        else:
+            pass
+
+    @property
+    def accountsID(self):
+        return self._accountsID
+
+    @property
+    def history(self):
+        return self._history
+
+
+
+
+
+
+
+@dataclass
+class OnlineBankingAccount:
+    _ID:int
+    _email:str
+    _password:str
+    _CustomerID:int
+    _AccountsID:int
+
+    def createOnlineBankingAccount(self):
+        return wdb.createOnlineBankingAcct(self)
+    def changeLoginDetails(self):
+        return wdb.changeLoginDetails(self)
+
+
+    @property
+    def ID(self):
+        return self._ID
+    @property
+    def email(self):
+        return self._email
+
+    @property
+    def password(self):
+        return self._password
+
+    @property
+    def customerID(self):
+        return self._CustomerID
+    @property
+    def accountsID(self):
+        return self._AccountsID
 
 
 
 def main():
+    # acct=TransactionHistory(25887740)
+    # print(acct.history)
     pass
 
 
