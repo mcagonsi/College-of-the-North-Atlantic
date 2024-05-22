@@ -13,6 +13,7 @@ import login_create_account as login
 from DBs import readDB as rdb
 from DBs import writeDB as wdb
 from objs import entity as E
+from objs import abstracts as A
 @dataclass
 class ReceiveMoney(tk.Tk):
     def __init__(self, accounts):
@@ -461,73 +462,75 @@ class TransactionHistory(tk.Tk):
     def __init__(self,AccountsID):
         tk.Tk.__init__(self)
         self.title('Accounts Transaction History')
-        self.geometry('930x600')
-        frame = ttk.Frame(self,padding='10 10 10 10',width=900,height=600)
+        self.geometry('860x500')
+        container = ttk.Frame(self,padding='10 10 10 10',width=900,height=600)
+        container.pack(fill='both',expand=True)
+        frame = A.ScrollableFrame(container)
         frame.pack(expand = True, fill=tk.BOTH)
 
         Accts_Trns_History = E.TransactionHistory(AccountsID).history.values()
 
-        TransID_label = ttk.Label(frame, text='ID', font=('Arial', 10, 'bold'))
+        TransID_label = ttk.Label(frame.scroll, text='ID', font=('Arial', 10, 'bold'))
         TransID_label.grid(row=1, column=0)
 
-        type_label = ttk.Label(frame, text='Type', font=('Arial', 10,'bold'))
+        type_label = ttk.Label(frame.scroll, text='Type', font=('Arial', 10,'bold'))
         type_label.grid(row=1, column=1)
 
-        from_label = ttk.Label(frame, text='From', font=('Arial', 10,'bold'))
+        from_label = ttk.Label(frame.scroll, text='From', font=('Arial', 10,'bold'))
         from_label.grid(row=1, column=2)
 
-        amount_label = ttk.Label(frame, text='Amount', font=('Arial', 10,'bold'))
+        amount_label = ttk.Label(frame.scroll, text='Amount', font=('Arial', 10,'bold'))
         amount_label.grid(row=1, column=3)
 
-        to_label = ttk.Label(frame, text='To', font=('Arial', 10,'bold'))
+        to_label = ttk.Label(frame.scroll, text='To', font=('Arial', 10,'bold'))
         to_label.grid(row=1, column=4)
 
-        to_bank = ttk.Label(frame, text='To Bank', font=('Arial', 10,'bold'))
+        to_bank = ttk.Label(frame.scroll, text='To Bank', font=('Arial', 10,'bold'))
         to_bank.grid(row=1, column=5)
 
-        to_accountNo_label = ttk.Label(frame, text='To Account', font=('Arial', 10,'bold'))
+        to_accountNo_label = ttk.Label(frame.scroll, text='To Account', font=('Arial', 10,'bold'))
         to_accountNo_label.grid(row=1, column=6)
 
-        date_label = ttk.Label(frame, text='Date', font=('Arial', 10,'bold'))
+        date_label = ttk.Label(frame.scroll, text='Date', font=('Arial', 10,'bold'))
         date_label.grid(row=1, column=7)
 
-        status_label = ttk.Label(frame, text='Status', font=('Arial', 10,'bold'))
+        status_label = ttk.Label(frame.scroll, text='Status', font=('Arial', 10,'bold'))
         status_label.grid(row=1, column=8)
 
 
 
         row = 2
         if len(Accts_Trns_History) == 0:
-            no_transactions_label = ttk.Label(frame, text='No Transactions', font=('Arial', 10))
+            no_transactions_label = ttk.Label(frame.scroll, text='No Transactions', font=('Arial', 10))
             no_transactions_label.grid(row=row, column=0,sticky=tk.NSEW)
         else:
             for trans in Accts_Trns_History:
-                trnscid = ttk.Label(frame, text=trans.transactionID, font=('Arial', 10))
-                trnscid.grid(row=row, column=0)
+                trnscid = ttk.Label(frame.scroll, text=trans.transactionID, font=('Arial', 10))
+                trnscid.grid(row=row, column=0,padx=5,pady=5)
 
-                trnsctype = ttk.Label(frame, text=trans.type, font=('Arial', 10))
-                trnsctype.grid(row=row, column=1)
+                trnsctype = ttk.Label(frame.scroll, text=trans.type, font=('Arial', 10))
+                trnsctype.grid(row=row, column=1,padx=5,pady=5)
 
-                trnscFrom = ttk.Label(frame, text=trans.From, font=('Arial', 10))
-                trnscFrom.grid(row=row, column=2)
+                trnscFrom = ttk.Label(frame.scroll, text=trans.From, font=('Arial', 10))
+                trnscFrom.grid(row=row, column=2,padx=5,pady=5)
 
-                trnscAmt = ttk.Label(frame, text=trans.amount, font=('Arial', 10))
-                trnscAmt.grid(row=row, column=3)
+                trnscAmt = ttk.Label(frame.scroll, text=trans.amount, font=('Arial', 10))
+                trnscAmt.grid(row=row, column=3,padx=5,pady=5)
 
-                trnscTo = ttk.Label(frame, text=trans.to, font=('Arial', 10))
-                trnscTo.grid(row=row, column=4)
+                trnscTo = ttk.Label(frame.scroll, text=trans.to, font=('Arial', 10))
+                trnscTo.grid(row=row, column=4,padx=5,pady=5)
 
-                trnscToBank = ttk.Label(frame, text=trans.toBankName, font=('Arial', 10))
-                trnscToBank.grid(row=row, column=5)
+                trnscToBank = ttk.Label(frame.scroll, text=trans.toBankName, font=('Arial', 10))
+                trnscToBank.grid(row=row, column=5,padx=5,pady=5)
 
-                toAccountNo = ttk.Label(frame, text=trans.toAccountNumber, font=('Arial', 10))
-                toAccountNo.grid(row=row, column=6)
+                toAccountNo = ttk.Label(frame.scroll, text=trans.toAccountNumber, font=('Arial', 10))
+                toAccountNo.grid(row=row, column=6,padx=5,pady=5)
 
-                trnscDate = ttk.Label(frame, text=trans.date, font=('Arial', 10))
-                trnscDate.grid(row=row, column=7)
+                trnscDate = ttk.Label(frame.scroll, text=trans.date, font=('Arial', 10))
+                trnscDate.grid(row=row, column=7,padx=5,pady=5)
 
-                trnscStatus = ttk.Label(frame, text=trans.status, font=('Arial', 10))
-                trnscStatus.grid(row=row, column=8)
+                trnscStatus = ttk.Label(frame.scroll, text=trans.status, font=('Arial', 10))
+                trnscStatus.grid(row=row, column=8,padx=5,pady=5)
 
                 row +=1
 
@@ -535,7 +538,7 @@ class TransactionHistory(tk.Tk):
 
 
         for child in frame.winfo_children():
-            child.grid_configure(padx=12, pady=12)
+            child.grid_configure(padx=20, pady=20)
 
 @dataclass
 class CreateAccount(tk.Tk):
@@ -621,6 +624,7 @@ class CloseAccount(tk.Tk):
                 acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
             else:
                 messagebox.showerror('Error', 'Account does not exist or \n something went wrong')
+                messagebox.showinfo('Error','Note that an account will not be deleted \n if a transaction has been done with that account \n for security reasons \n Please contact us.')
                 self.destroy()
                 acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
 
@@ -638,6 +642,7 @@ class CloseAccount(tk.Tk):
                 acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
             else:
                 messagebox.showerror('Error', 'Account does not exist or \n something went wrong')
+                messagebox.showinfo('Error', 'Note that an account will not be deleted \n if a transaction has been done with that account \n for security reasons \n Please contact us.')
                 self.destroy()
                 acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
 

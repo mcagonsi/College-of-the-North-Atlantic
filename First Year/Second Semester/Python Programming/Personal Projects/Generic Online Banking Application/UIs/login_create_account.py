@@ -295,8 +295,4 @@ class ValidateAccount(tk.Tk):
             child.grid_configure(padx=10, pady=10)
 
 
-# validate = ValidateAccount()
-# validate.mainloop
 
-# create = CreateAccount()
-# create.mainloop()

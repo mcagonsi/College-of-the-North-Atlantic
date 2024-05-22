@@ -343,7 +343,6 @@ def manageCustomerAccount():
 
         c.execute(getaccountsID, (lname, phone))
         accountsID = c.fetchall()
-        print(accountsID)
 
         if accountsID == None:
             print('CUSTOMER ACCOUNT NOT FOUND')

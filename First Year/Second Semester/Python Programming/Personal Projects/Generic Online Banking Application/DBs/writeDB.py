@@ -82,7 +82,7 @@ def closeSavingsAccount(AccountsID):
             checkSavings = 'Select AccountNumber,Balance from account where Accounts_ID=%s and AccountType_ID=%s'
             c.execute(checkSavings,(AccountsID,2))
             Acct = c.fetchall()[0]
-            print(Acct)
+
             if Acct is not None:
                 if Acct[1] == 0:
                     closeSavings = 'DELETE FROM account where AccountNumber=%s'
@@ -99,12 +99,15 @@ def closeSavingsAccount(AccountsID):
 
 
 def closeInvestmentAccount(AccountsID):
+
     try:
         checkInvestment = 'Select AccountNumber,Balance from account where Accounts_ID=%s and AccountType_ID=%s'
         c.execute(checkInvestment, (AccountsID, 3))
         Acct = c.fetchall()[0]
+
         if Acct is not None:
-            if Acct[1] == 0:
+            if int(Acct[1]) == 0:
+
                 closeSavings = 'DELETE FROM account where AccountNumber=%s'
                 c.execute(closeSavings, (Acct[0],))
                 con.commit()
@@ -112,8 +115,10 @@ def closeInvestmentAccount(AccountsID):
             elif Acct[1] > 0:
                 return False
         else:
+
             return None
     except Exception as e:
+
         return None
 
 def closeOnlineBankingAccount(OnlineBankingID):
