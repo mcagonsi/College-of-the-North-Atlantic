@@ -10,12 +10,14 @@ import mysql.connector as db
 con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='bankdb')
 c = con.cursor()
 
+
 @dataclass
 class Bank:
     _BankName: str
-    _Employees:dict
-    _Customers:dict
-    _Accounts:dict
+    _Employees=None
+    _Customers=dict
+    _AccountsIDs=dict
+    _Accounts=None
     _Address: str
     _City: str
     _Country: str
@@ -25,28 +27,34 @@ class Bank:
     @property
     def bankName(self):
         return self._BankName
-
-    @property
-    def employees(self):
-        return self._Employees
-
     @property
     def customers(self):
         return self._Customers
+
     @property
     def accounts(self):
         return self._Accounts
+    @property
+    def accountsids(self):
+        return self._AccountsIDs
 
-    # def __post_init__(self):
-    #     self._Accounts = readaccts()
-    #     self._Customers = readcustomer()
-    #     self._Employees = readEmployees()
+    def __post_init__(self):
+        self._Accounts = rdb.getBankAccounts()
+        self._Customers = rdb.getBankCustomers()
+        self._AccountsIDs = rdb.getBankAccountsIDs()
 
     def validateCustomersAccount(self,value):
         pass
         # if value in self._Accounts # this is to validate for creating an online account or logging in
         #     return True
-    def validateAccountNumber(self,value):
+    def validateAccountNumber(self,AccountNumber):
+        if AccountNumber in self._Accounts:
+            account = self._Accounts[AccountNumber]
+            customerid = self._AccountsIDs[account.accountsID]
+            customer = self._Customers[customerid]
+            return account,customer
+        else:
+            return None,None
         pass
        # if value in self._Accounts: # this is to validate customer account exists for the external client to return the name of the client during transactions
 
@@ -139,12 +147,19 @@ class Account:
     def getBalance(self):
         return locale.currency(self._Balance,grouping=True)
 
-    def creditAccount(self,value):
-        cur_bal = float(self._Balance)
-        self._Balance =cur_bal+ value
-    def debitAccount(self,value):
-        cur_bal = float(self._Balance)
-        self._Balance = cur_bal - value
+    def creditAccount(self,Trns):
+        creditAccount ="insert into transaction(ID,type,amount,FromBankName,FromName,FromAccountNumber,ToBankName,ToAccountNumber) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
+        c.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
+        con.commit()
+
+        return True
+
+    def debitAccount(self,Trns):
+        debitAccount = "insert into transaction(ID,type,amount,FromBankName,FromAccountNumber,ToBankName,ToName,ToAccountNumber) values (default,'DEBIT',%s,%s,%s,%s,%s,%s);"
+        c.execute(debitAccount,(Trns.amount,Trns.fromBankName,Trns.fromAccountNumber,Trns.toBankName,Trns.to,Trns.toAccountNumber))
+        con.commit()
+
+        return True
 
     def showTransactionHistory(self):
         rdb.getTransactionHistory(self)

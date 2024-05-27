@@ -2,6 +2,7 @@ import sys
 sys.path.append("../")
 sys.path.append("../DBs")
 sys.path.append("../funcs")
+sys.path.append('../APIs')
 from tkinter import ttk, messagebox
 import tkinter as tk
 from tkinter import *
@@ -14,6 +15,16 @@ from DBs import readDB as rdb
 from DBs import writeDB as wdb
 from objs import entity as E
 from objs import abstracts as A
+from objs import actors as I
+
+# THESE IMPORTS WILL ACT LIKE THE IPs FOR SIMULATING API CALLS
+
+#for Tesla Bank
+
+from APIs import BankAPI as TeslaBank
+
+BANKS_API = [TeslaBank.API()]
+
 @dataclass
 class ReceiveMoney(tk.Tk):
     def __init__(self, accounts):
@@ -235,28 +246,108 @@ class ProfileDetails(tk.Tk):
 
 @dataclass
 class SendMoney(tk.Tk):
-    def __init__(self, customerID,AccountsID):
+
+    def __init__(self,OnlineBankingAcct, CUSTOMER,accounts):
+        self._RECIPIENT = None
         tk.Tk.__init__(self)
         self.title('Send Money')
         self.resizable(False, False)
         self.geometry('350x380')
         frame = ttk.Frame(self,padding='10 10 10 10')
         frame.pack(expand = True, fill=tk.BOTH)
+        global BANKS_API
+        banks = [bank.name for bank in BANKS_API]
+        banks.insert(0,'Select Bank')
 
+        def cancel():
+            self.destroy()
+            acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
         def validate():
-            pass
+            if bank.get() == 'Select Bank':
+                messagebox.showwarning('Warning', 'Please Select Bank')
+            else:
+                for api in BANKS_API:
+                    if api.name == bank.get():
+                        if acct_number.get() == ''  or amount.get() == '':
+                            required = ttk.Label(frame, text='required', font=('Arial', 7), foreground='red')
+                            required.grid(row=3, column=4, sticky=tk.W)
+                            required_no = ttk.Label(frame, text='required', font=('Arial', 7), foreground='red')
+                            required_no.grid(row=2, column=4, sticky=tk.W)
+                        else:
+                            try:
+                                if int(acct_number.get()) in accounts:
+                                    messagebox.showerror('Error','Cannot Send Money to Your Account')
+                                else:
+                                    recipientBank, recipientAccount, recipient = api.get(int(acct_number.get()))
+                                    time.sleep(2)
+                                    if api.status == 404:
+                                        messagebox.showwarning('Validation Failed','Customer not Found')
+                                    elif api.status == 200:
+
+                                        recipient_name.set(recipient.FullName)
+
+                                        try:
+                                            if isinstance(float(amount.get()), float):
+                                                pass
+                                        except ValueError:
+                                            messagebox.showwarning('Validation Failed', 'Amount must be numeric')
+
+                                        self._RECIPIENT = I.ExternalClient(recipientBank, recipient.FullName,recipientAccount.accountNumber,float(amount.get()))
+                                    else:
+                                        messagebox.showwarning('Failed', 'Something went wrong')
+                            except ValueError:
+                                messagebox.showwarning('Validation Failed', 'Account Number must be numeric')
+
 
         def confirm():
-            pass
+            if transaction_pin.get() == "":
+                pin_required = ttk.Label(frame, text='required', font=('Arial', 7), foreground='red')
+                pin_required.grid(row=5, column=4, sticky=tk.W)
+            elif isinstance(int(transaction_pin.get()),int):
+                if int(transaction_pin.get()) == br.getpin():
+                    if bank.get() == 'Select Bank' or bank.get()== '':
+                        messagebox.showwarning('Transaction Failed','Please Select Bank and Fill other details')
+                    else:
+                        for account in accounts.values():
+                            if int(account.accountType.id) == 1:
+                                if int(amount.get()) <= account.balance:
+                                    DEBIT_TRANSACTION = E.Transaction(0,0,'DEBIT',float(amount.get()),None,TeslaBank.BANK.bankName,account.accountType.name,account.accountNumber,self._RECIPIENT.bankName, self._RECIPIENT.FullName, self._RECIPIENT.accountNumber,'success')
+                                    CREDIT_TRANSACTION = E.Transaction(0,0,'CREDIT',float(amount.get()),None,TeslaBank.BANK.bankName,CUSTOMER.FullName,account.accountNumber,self._RECIPIENT.bankName,account.accountType.name, self._RECIPIENT.accountNumber,'success')
+
+                                    debit = account.debitAccount(DEBIT_TRANSACTION)
+                                    if debit == True:
+                                        for api in BANKS_API:
+                                            if api.name == bank.get():
+                                                api.post(CREDIT_TRANSACTION)
+                                                if api.status == 200:
+                                                    time.sleep(2)
+                                                    messagebox.showinfo('Successful', 'Money Sent')
+                                                    self.destroy()
+                                                    acct_ov.AccountOverviewMenu(OnlineBankingAcct).mainloop()
+                                                elif api.status == 400:
+                                                    messagebox.showwarning('Failed', 'Money Not Sent')
+                                                else:
+                                                    messagebox.showwarning('Failed', 'Something went wrong')
+                                else:
+                                    messagebox.showwarning('Failed', 'Insufficient Funds')
+                else:
+                    messagebox.showerror('Invalid Pin','Wrong Transaction Pin, please try again')
+
+            else:
+                messagebox.showwarning('Failed','Pin must be numeric')
+
+
+
+
         note = Label(frame,text='Note: Money can only be sent from Chequing Account \n if Checking balance is 0, transfer from other account',font=('Arial', 7, 'bold'),fg='red')
         note.grid(row=0, column=1,columnspan=3)
 
         bankName_label = ttk.Label(frame, text='Bank Name:', font=('Arial', 10))
         bankName_label.grid(row=1, column=2, sticky=tk.E)
 
-        banks = ['Tesla Inc. Bank', 'Royal Bank of Canada', 'San Francisco Bank', 'San Francisco Bank']
 
-        bank = tk.StringVar()
+
+        bank = StringVar()
         bank_menu = ttk.OptionMenu(frame, bank, *banks)
         bank_menu.grid(row=1, column=3, sticky=tk.W)
 
@@ -286,13 +377,13 @@ class SendMoney(tk.Tk):
         pin_label.grid(row=5, column=2, sticky=tk.E)
 
         transaction_pin = tk.StringVar()
-        transaction_pin_entry = ttk.Entry(frame, textvariable=transaction_pin)
+        transaction_pin_entry = ttk.Entry(frame, textvariable=transaction_pin,show='*')
         transaction_pin_entry.grid(row=5, column=3, sticky=tk.W)
 
         confirm_button = ttk.Button(frame, text= 'CONFIRM', command=confirm)
         confirm_button.grid(row=6, column=2, sticky=tk.E)
 
-        cancel_button = ttk.Button(frame, text= 'CANCEL', command=self.destroy)
+        cancel_button = ttk.Button(frame, text= 'CANCEL', command=cancel)
         cancel_button.grid(row=6, column=3, sticky=tk.W)
 
         for child in frame.winfo_children():
@@ -462,7 +553,7 @@ class TransactionHistory(tk.Tk):
     def __init__(self,AccountsID):
         tk.Tk.__init__(self)
         self.title('Accounts Transaction History')
-        self.geometry('860x500')
+        self.geometry('950x500')
         container = ttk.Frame(self,padding='10 10 10 10',width=900,height=600)
         container.pack(fill='both',expand=True)
         frame = A.ScrollableFrame(container)

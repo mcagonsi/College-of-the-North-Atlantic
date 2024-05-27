@@ -43,7 +43,8 @@ class AccountOverviewMenu(tk.Tk):
         #ACCOUNT OPERATION FUNCTIONS
 
         def sendMoney():
-            AO.SendMoney(customerID, AccountsID).mainloop()
+            self.destroy()
+            AO.SendMoney(OnlineBankingAccount,CUSTOMER, accounts.showAccounts()).mainloop()
 
         def receiveMoney():
             receiveMoney = AO.ReceiveMoney(accounts)

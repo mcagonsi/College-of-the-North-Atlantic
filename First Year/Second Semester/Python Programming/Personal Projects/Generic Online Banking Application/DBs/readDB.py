@@ -77,10 +77,55 @@ def getTransactionHistory(accountsID):
     else:
         return None
 
+def getBankAccounts():
+
+    getBankAccounts = 'select * from account'
+    c.execute(getBankAccounts)
+    Accounts = {}
+    readAccts = c.fetchall()
+    if readAccts is not None:
+        for account in readAccts:
+            if account[3]==1:
+
+                Accounts[account[0]] = E.Account(account[0], account[1], account[2], E.AccountType(account[3]), account[4])
+
+        return Accounts
+
+    else:
+        return None
+def getBankCustomers():
+    getCustomers = 'select * from Customer'
+    c.execute(getCustomers)
+    CUSTOMERS = {}
+    customers = c.fetchall()
+
+    if customers is not None:
+        for cust in customers:
+           CUSTOMERS[cust[0]] = A.Customer(cust[1], cust[2], cust[3], cust[4].isoformat(), cust[5], cust[6], cust[7], cust[8], cust[9],
+                                  cust[10], cust[11], cust[12], cust[0])
+        return CUSTOMERS
+    else:
+        return None
+
+def getBankAccountsIDs():
+    getBankAccountsIDs = 'select * from Accounts'
+    c.execute(getBankAccountsIDs)
+    ACCOUNTSIDs = {}
+    AccountsIDs = c.fetchall()
+    if AccountsIDs is not None:
+        for accountsID in AccountsIDs:
+            ACCOUNTSIDs[accountsID[0]] = accountsID[1]
+        return ACCOUNTSIDs
+    else:
+        return None
+
+
+
 def main():
     # getCustomerInfo(1)
     # print(getTransactionHistory(25887740))
     # print(validateFinancialAccountandCheckOnlineAcct(10576928, 'AGONSI', '2000-04-19'))
+    getBankAccounts()
     pass
 if __name__ == '__main__':
     main()

@@ -107,10 +107,10 @@ class Customer(Person):
 @dataclass
 class ExternalClient:
     _Bank: str # this will have to take a bank class as the input.
-    _FullName = ''
+    _FullName:str
     _AccountNumber:int
     _Amount:float
-    _TransactionType:str
+
 
     def __post_init__(self):
         pass
@@ -120,13 +120,19 @@ class ExternalClient:
     def FullName(self):
         return self._FullName
 
-    def initiateTransaction(self):
-        pass
-        #writee conditions for credit and debit
+    @property
+    def accountNumber(self):
+        return self._AccountNumber
 
-    def validateClient(self):
-        pass
-        # should return boolean
+    @property
+    def amount(self):
+        return self._Amount
+
+    @property
+    def bankName(self):
+        return self._Bank
+
+
 
 def main():
     pass

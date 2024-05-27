@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bankdb.sql" type="DatabaseScript" editBeforeRun="true">
+    <script-file value="$APPLICATION_CONFIG_DIR$/consoles/db/cc46dbbc-8111-44e7-8511-f0a29cbf8238/console.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="bcc854d7-946a-410c-8cad-8b32300d70f1" namespace="schema/&quot;bankdb&quot;" />
+    <method v="2" />
+  </configuration>
+</component>
