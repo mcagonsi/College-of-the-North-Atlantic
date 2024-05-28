@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS bankdb;
+DROP DATABASE IF EXISTS rbcdb;
 -- CREATES THE BANK DATABASE
-create database if not exists bankdb;
+create database if not exists rbcdb;
 
-use bankdb;
+use rbcdb;
 
 -- CREATES THE CUSTOMER TABLE
 DROP TABLE IF EXISTS `Customer` ;
@@ -66,7 +66,7 @@ DROP TABLE IF EXISTS `OnlineBankingAcct` ;
 CREATE TABLE IF NOT EXISTS `OnlineBankingAcct` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Email` VARCHAR(40) NOT NULL,
-  `Password` VARCHAR(300) NOT NULL,
+  `Password` VARCHAR(100) NOT NULL,
   `customerID`INT NOT NULL,
   `AccountsID` INT NULL,
   
@@ -142,16 +142,16 @@ CREATE INDEX `fk_Transaction_Account1_idx` ON `Transaction` (`accountID` ASC) VI
 
 
 -- INSERTS REQUIRED VALUES FOR THE ACCOUNT TYPE TABLE
-USE bankdb;
+USE rbcdb;
 INSERT INTO accounttype VALUES (1,'CHEQUING');
 INSERT INTO accounttype VALUES (2, 'SAVINGS');
 INSERT INTO accounttype VALUES (3, 'INVESTMENT');
 
 -- CREATES THE TRIGGER FOR CREATING FINANCIAL ACCOUNT ONCE A NEW CUSTOMER IS ADDED TO THE BANK DEFAULT IS CHEQUINGS ACCOUNT CREATION
-drop trigger if exists create_financial_account;
+drop trigger if exists rbcdb.create_financial_account;
 
 delimiter //
-create trigger create_financial_account
+create trigger rbcdb.create_financial_account
 	after insert on Customer
 	for each row
 BEGIN
@@ -174,22 +174,22 @@ delimiter ;
 
 
 -- CREATES THE CUSTOMER_ACCOUNTS_ACCOUNT VIEW 
-drop view if exists Customer_Accounts_Account;
+drop view if exists rbcdb.Customer_Accounts_Account;
 
-CREATE VIEW Customer_Accounts_Account AS
-SELECT customer.ID ,customer.LastName, customer.PhoneNumber, accounts.ID as accounts_id, account.AccountNumber, account.AccountType_ID, account.Active
-FROM accounts 
-join account on accounts.id = account.Accounts_ID
-join customer on accounts.Customer_ID = customer.ID;
+CREATE VIEW rbcdb.Customer_Accounts_Account AS
+SELECT rbcdb.customer.ID , rbcdb.customer.LastName, rbcdb.customer.PhoneNumber, rbcdb.accounts.ID as accounts_id, rbcdb.account.AccountNumber, rbcdb.account.AccountType_ID, rbcdb.account.Active
+FROM rbcdb.accounts 
+join rbcdb.account on rbcdb.accounts.id = rbcdb.account.Accounts_ID
+join rbcdb.customer on rbcdb.accounts.Customer_ID = rbcdb.customer.ID;
 
 -- CREATES THE TRIGGER TO CLOSE CUSTOMER ACCOUNT AND DELETE CUSTOMER FROM THE DATABASE IF CUSTOMER WISHES TO CLOSE ACCOUNT
 
 
-drop trigger if exists close_customer_account;
+drop trigger if exists rbcdb.close_customer_account;
 
 delimiter //
-create trigger close_customer_account
-	before delete on customer
+create trigger rbcdb.close_customer_account
+	before delete on rbcdb.customer
 	for each row
 BEGIN
 

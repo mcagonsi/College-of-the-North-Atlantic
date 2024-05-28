@@ -7,7 +7,7 @@ from DBs import readDB as rdb
 import locale
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 import mysql.connector as db
-con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='bankdb')
+con = db.connect(host='localhost',user='root',passwd='root',port=3306,database='tesladb')
 c = con.cursor()
 
 
@@ -71,7 +71,7 @@ class AccountType:
 
     def __post_init__(self):
 
-        query = 'select * from accounttype;'
+        query = 'select * from `accounttype`;'
         c.execute(query)
         types = c.fetchall()
         for t in types:
@@ -86,10 +86,10 @@ class Accounts:
 
 
     def __post_init__(self):
-        CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
+        CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
         C = CON.cursor()
 
-        getaccounts = 'select * from account where Accounts_ID = %s '
+        getaccounts = 'select * from `account` where `Accounts_ID` = %s '
         C.execute(getaccounts, (self._ID,))
         Accounts = C.fetchall()
         for a in Accounts:
@@ -109,7 +109,7 @@ class Accounts:
     def showAccounts(self):
         return self._Accounts
 
-
+        
 
 
 
@@ -145,14 +145,14 @@ class Account:
         return locale.currency(self._Balance,grouping=True)
 
     def creditAccount(self,Trns):
-        creditAccount ="insert into transaction(ID,type,amount,FromBankName,FromName,FromAccountNumber,ToBankName,ToAccountNumber) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
+        creditAccount ="insert into `transaction`(`ID`,`type`,`amount`,`FromBankName`,`FromName`,`FromAccountNumber`,`ToBankName`,`ToAccountNumber`) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
         c.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
         con.commit()
 
         return True
 
     def debitAccount(self,Trns):
-        debitAccount = "insert into transaction(ID,type,amount,FromBankName,FromAccountNumber,ToBankName,ToName,ToAccountNumber) values (default,'DEBIT',%s,%s,%s,%s,%s,%s);"
+        debitAccount = "insert into `transaction`(`ID`,`type`,`amount`,`FromBankName`,`FromAccountNumber`,`ToBankName`,`ToName`,`ToAccountNumber`) values (default,'DEBIT',%s,%s,%s,%s,%s,%s);"
         c.execute(debitAccount,(Trns.amount,Trns.fromBankName,Trns.fromAccountNumber,Trns.toBankName,Trns.to,Trns.toAccountNumber))
         con.commit()
 

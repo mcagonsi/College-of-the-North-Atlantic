@@ -15,9 +15,6 @@ from dataclasses import dataclass
 import account_operations as AO
 from objs import actors as A
 from objs import entity as E
-import mysql.connector as db
-con = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
-c = con.cursor()
 
 @dataclass
 class AccountOverviewMenu(tk.Tk):
@@ -202,6 +199,6 @@ class AccountOverviewMenu(tk.Tk):
             child.grid_configure(padx=8, pady=8)
 
 
-# account = AccountOverviewMenu(E.OnlineBankingAccount(1,'Agonsimichael1233@gmail.com','pssddd',1,4848)).mainloop()
+
 
 
