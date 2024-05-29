@@ -44,17 +44,6 @@ class Bank:
         self._AccountsIDs = rdb.getBankAccountsIDs()
 
 
-    def validateAccountNumber(self,AccountNumber):
-        if AccountNumber in self._Accounts:
-            account = self._Accounts[AccountNumber]
-            customerid = self._AccountsIDs[account.accountsID]
-            customer = self._Customers[customerid]
-            return account,customer
-        else:
-            return None,None
-        pass
-       # if value in self._Accounts: # this is to validate customer account exists for the external client to return the name of the client during transactions
-
 
 @dataclass
 class AccountType:
@@ -144,10 +133,12 @@ class Account:
     def getBalance(self):
         return locale.currency(self._Balance,grouping=True)
 
-    def creditAccount(self,Trns):
+    def creditAccount(self,CON,Trns):
+        C = CON.cursor()
         creditAccount ="insert into `transaction`(`ID`,`type`,`amount`,`FromBankName`,`FromName`,`FromAccountNumber`,`ToBankName`,`ToAccountNumber`) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
-        c.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
-        con.commit()
+        C.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
+        CON.commit()
+        CON.close()
 
         return True
 

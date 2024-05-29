@@ -144,10 +144,11 @@ class Account:
     def getBalance(self):
         return locale.currency(self._Balance,grouping=True)
 
-    def creditAccount(self,Trns):
+    def creditAccount(self,CON,Trns):
+        C = CON.cursor()
         creditAccount ="insert into `transaction`(`ID`,`type`,`amount`,`FromBankName`,`FromName`,`FromAccountNumber`,`ToBankName`,`ToAccountNumber`) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
-        c.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
-        con.commit()
+        C.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
+        CON.commit()
 
         return True
 

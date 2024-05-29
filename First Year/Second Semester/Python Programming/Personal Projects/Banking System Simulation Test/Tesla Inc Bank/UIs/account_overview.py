@@ -15,6 +15,9 @@ from dataclasses import dataclass
 import account_operations as AO
 from objs import actors as A
 from objs import entity as E
+import mysql.connector as db
+con = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
+c = con.cursor()
 
 @dataclass
 class AccountOverviewMenu(tk.Tk):

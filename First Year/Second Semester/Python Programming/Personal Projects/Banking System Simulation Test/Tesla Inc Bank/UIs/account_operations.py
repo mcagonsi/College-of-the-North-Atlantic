@@ -19,15 +19,15 @@ from objs import actors as I
 
 # THESE IMPORTS WILL ACT LIKE THE IPs FOR SIMULATING API CALLS
 
-#for RBC Bank
-from APIs import TeslaAPI as TESLA
+#for TESLA Bank
+import TeslaAPI as TESLA
 
-#for Tesla Bank
-# sys.path.append('../../Tesla Inc Bank/APIs')
-# import TeslaAPI as TESLA
+# FOR RBC
+sys.path.append('../../Royal Bank of Canada/APIs')
+import RBCanada as RBC
 
 
-BANKS_API = [TESLA.API()]
+BANKS_API = [TESLA.API(),RBC.API()]
 
 @dataclass
 class ReceiveMoney(tk.Tk):
@@ -315,8 +315,8 @@ class SendMoney(tk.Tk):
                         for account in accounts.values():
                             if int(account.accountType.id) == 1:
                                 if int(amount.get()) <= account.balance:
-                                    DEBIT_TRANSACTION = E.Transaction(0,0,'DEBIT',float(amount.get()),None,RBC.BANK.bankName,account.accountType.name,account.accountNumber,self._RECIPIENT.bankName, self._RECIPIENT.FullName, self._RECIPIENT.accountNumber,'success')
-                                    CREDIT_TRANSACTION = E.Transaction(0,0,'CREDIT',float(amount.get()),None,RBC.BANK.bankName,CUSTOMER.FullName,account.accountNumber,self._RECIPIENT.bankName,account.accountType.name, self._RECIPIENT.accountNumber,'success')
+                                    DEBIT_TRANSACTION = E.Transaction(0,0,'DEBIT',float(amount.get()),None,TESLA.API().name,account.accountType.name,account.accountNumber,self._RECIPIENT.bankName, self._RECIPIENT.FullName, self._RECIPIENT.accountNumber,'success')
+                                    CREDIT_TRANSACTION = E.Transaction(0,0,'CREDIT',float(amount.get()),None,TESLA.API().name,CUSTOMER.FullName,account.accountNumber,self._RECIPIENT.bankName,account.accountType.name, self._RECIPIENT.accountNumber,'success')
 
                                     debit = account.debitAccount(DEBIT_TRANSACTION)
                                     if debit == True:

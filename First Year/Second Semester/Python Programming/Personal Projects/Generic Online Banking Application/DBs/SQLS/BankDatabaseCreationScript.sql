@@ -1,10 +1,11 @@
-DROP DATABASE IF EXISTS bankdb;
+DROP DATABASE IF EXISTS rbcdb;
 -- CREATES THE BANK DATABASE
-create database if not exists bankdb;
+create database if not exists rbcdb;
 
-use bankdb;
+use rbcdb;
 
 -- CREATES THE CUSTOMER TABLE
+use rbcdb;
 DROP TABLE IF EXISTS `Customer` ;
 
 CREATE TABLE IF NOT EXISTS `Customer` (
@@ -66,7 +67,7 @@ DROP TABLE IF EXISTS `OnlineBankingAcct` ;
 CREATE TABLE IF NOT EXISTS `OnlineBankingAcct` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Email` VARCHAR(40) NOT NULL,
-  `Password` VARCHAR(300) NOT NULL,
+  `Password` VARCHAR(100) NOT NULL,
   `customerID`INT NOT NULL,
   `AccountsID` INT NULL,
   
@@ -142,17 +143,17 @@ CREATE INDEX `fk_Transaction_Account1_idx` ON `Transaction` (`accountID` ASC) VI
 
 
 -- INSERTS REQUIRED VALUES FOR THE ACCOUNT TYPE TABLE
-USE bankdb;
-INSERT INTO accounttype VALUES (1,'CHEQUING');
-INSERT INTO accounttype VALUES (2, 'SAVINGS');
-INSERT INTO accounttype VALUES (3, 'INVESTMENT');
+USE rbcdb;
+INSERT INTO `AccountType` VALUES (1,'CHEQUING');
+INSERT INTO `AccountType` VALUES (2, 'SAVINGS');
+INSERT INTO `AccountType` VALUES (3, 'INVESTMENT');
 
 -- CREATES THE TRIGGER FOR CREATING FINANCIAL ACCOUNT ONCE A NEW CUSTOMER IS ADDED TO THE BANK DEFAULT IS CHEQUINGS ACCOUNT CREATION
 drop trigger if exists create_financial_account;
 
 delimiter //
 create trigger create_financial_account
-	after insert on Customer
+	after insert on `Customer`
 	for each row
 BEGIN
 
@@ -161,12 +162,12 @@ BEGIN
 	declare onlinebankid int;
 	declare account_number int;
 	
-	select ID into customer_id from Customer where ID = new.ID;
+	select `ID` into customer_id from `Customer` where `ID` = new.`ID`;
 	set accountsid = FLOOR(RAND() * (9999 - 1000 + 1)) + 1000;
 	set account_number = concat(accountsid,'',FLOOR(RAND() * (9999 - 1000 + 1)) + 1000);
 	
-	insert into Accounts (ID,Customer_ID) values (accountsid,customer_id);
-	insert into Account values (account_number,0,True,1,accountsid);
+	insert into `Accounts` (`ID`,`Customer_ID`) values (accountsid,customer_id);
+	insert into `Account` values (account_number,0,True,1,accountsid);
 END //
 
 delimiter ;
@@ -174,13 +175,13 @@ delimiter ;
 
 
 -- CREATES THE CUSTOMER_ACCOUNTS_ACCOUNT VIEW 
-drop view if exists Customer_Accounts_Account;
+drop view if exists `Customer_Accounts_Account`;
 
-CREATE VIEW Customer_Accounts_Account AS
-SELECT customer.ID ,customer.LastName, customer.PhoneNumber, accounts.ID as accounts_id, account.AccountNumber, account.AccountType_ID, account.Active
-FROM accounts 
-join account on accounts.id = account.Accounts_ID
-join customer on accounts.Customer_ID = customer.ID;
+CREATE VIEW `Customer_Accounts_Account` AS
+SELECT `Customer`.`ID` , `Customer`.`LastName`, `Customer`.`PhoneNumber`, `Accounts`.`ID` as accounts_id, `Account`.`AccountNumber`, `Account`.`AccountType_ID`, `Account`.`Active`
+FROM `Accounts` 
+join `Account` on `Accounts`.`ID` = `Account`.`Accounts_ID`
+join `Customer` on `Accounts`.`Customer_ID` = `Customer`.`ID`;
 
 -- CREATES THE TRIGGER TO CLOSE CUSTOMER ACCOUNT AND DELETE CUSTOMER FROM THE DATABASE IF CUSTOMER WISHES TO CLOSE ACCOUNT
 
@@ -189,7 +190,7 @@ drop trigger if exists close_customer_account;
 
 delimiter //
 create trigger close_customer_account
-	before delete on customer
+	before delete on `Customer`
 	for each row
 BEGIN
 
@@ -201,19 +202,19 @@ BEGIN
     declare accountNumber int;
     
 	
-    select ID into customer_id from customer where ID = old.ID;
-	select accounts_id into accountsid from customer_accounts_account where ID = customer_id;
-    select OnlineBankingAcct_ID into onlinebankid from customer_accounts_account where ID = customer_id;
+    select `ID` into customer_id from `Customer` where `ID` = old.`ID`;
+	select `Accounts_id` into accountsid from `customer_accounts_account` where `ID` = customer_id;
+    select `OnlineBankingAcct_ID` into onlinebankid from customer_accounts_account where `ID` = customer_id;
     
-    delete from account where Accounts_ID = accounts_id and AccountType_ID =1;
-    delete from account where Accounts_ID = accounts_id and AccountType_ID =2;
-    delete from account where Accounts_ID = accounts_id and AccountType_ID =3;
+    delete from `Account` where `Accounts_ID` = accounts_id and `AccountType_ID` =1;
+    delete from `Account` where `Accounts_ID`= accounts_id and `AccountType_ID`=2;
+    delete from `Account` where `Accounts_ID`= accounts_id and `AccountType_ID` =3;
     
-    delete from accounts where ID = accountsid;
+    delete from `Accounts` where `ID` = accountsid;
     
     
     IF onlinebankid is not null then
-		delete from onlinebankingacct where ID = onlinebankid;
+		delete from `OnlineBankingAcct` where `ID` = onlinebankid;
 	END IF;
 	
 END //
@@ -226,14 +227,14 @@ drop trigger if exists generate_account_number;
 
 delimiter //
 create trigger generate_account_number
-	before insert on account
+	before insert on `Account`
 	for each row
 BEGIN
 
     declare account_number int;
     
-	set account_number = concat(new.accounts_id,'',FLOOR(RAND() * (9999 - 1000 + 1)) + 1000);
-    set new.accountNumber = account_number;
+	set account_number = concat(new.`Accounts_ID`,'',FLOOR(RAND() * (9999 - 1000 + 1)) + 1000);
+    set new.`AccountNumber` = account_number;
 	
 END //
 
@@ -245,7 +246,7 @@ drop trigger if exists transfer_transactions;
 
 delimiter //
 create trigger transfer_transactions
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare from_accountName varchar(10);
@@ -256,26 +257,26 @@ BEGIN
     declare to_balance Decimal(9,2);
     
     
-    select AccountType_ID into from_accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
-    select Name into from_accountName from AccountType where ID = from_accttype;
-    select AccountType_ID into to_accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
-    select Name into to_accountName from AccountType where ID = to_accttype;
+    select `AccountType_ID` into from_accttype from `customer_accounts_account` where `AccountNumber` = new.`FromAccountNumber`;
+    select `Name` into from_accountName from `AccountType` where `ID` = from_accttype;
+    select `AccountType_ID` into to_accttype from `customer_accounts_account` where `AccountNumber` = new.`ToAccountNumber`;
+    select `Name` into to_accountName from `AccountType` where `ID` = to_accttype;
     
-    select balance into from_balance from account where AccountNumber=new.FromAccountNumber;
-    select balance into to_balance from account where AccountNumber = new.ToAccountNumber;
-    
-    
+    select `Balance` into from_balance from `Account` where `AccountNumber` =new.`FromAccountNumber`;
+    select `Balance` into to_balance from `Account` where `AccountNumber` = new.`ToAccountNumber`;
     
     
-	if new.Type = 'TRANSFER' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.ToBankName = 'INTERNAL';
-        set new.FromBankName = 'INTERNAL';
-        set new.FromName = from_accountName;
-        set new.ToName = to_accountName;
-        update account set balance = from_balance - new.amount where AccountNumber = new.FromAccountNumber;
-		update account set balance = to_balance + new.amount where AccountNumber = new.ToAccountNumber;
+    
+    
+	if new.`Type` = 'TRANSFER' THEN
+        set new.`Status` = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`ToBankName` = 'INTERNAL';
+        set new.`FromBankName` = 'INTERNAL';
+        set new.`FromName` = from_accountName;
+        set new.`ToName` = to_accountName;
+        update account set `Balance` = from_balance - new.`Amount` where `AccountNumber` = new.`FromAccountNumber`;
+		update account set `Balance` = to_balance + new.`Amount` where `AccountNumber` = new.`ToAccountNumber`;
 	end if;
     
    
@@ -289,7 +290,7 @@ drop trigger if exists deposit_transfer_transactions;
 
 delimiter //
 create trigger deposit_transfer_transactions
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare from_accountName varchar(10);
@@ -299,27 +300,29 @@ BEGIN
     
     
     
-    select AccountType_ID into from_accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
-    select Name into from_accountName from AccountType where ID = from_accttype;
-    select AccountType_ID into to_accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
-    select Name into to_accountName from AccountType where ID = to_accttype;
+    select `AccountType_ID` into from_accttype from `customer_accounts_account` where `AccountNumber` = new.`FromAccountNumber`;
+    select `Name` into from_accountName from `AccountType` where `ID` = from_accttype;
+    select `AccountType_ID` into to_accttype from `customer_accounts_account` where `AccountNumber` = new.`ToAccountNumber`;
+    select `Name` into to_accountName from `AccountType` where `ID` = to_accttype;
     
     
     
     
-	if new.Type = 'T_DEPOSIT' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.ToBankName = 'INTERNAL';
-        set new.FromBankName = 'INTERNAL';
-        set new.FromName = from_accountName;
-        set new.ToName = to_accountName;
+	if new.`Type` = 'T_DEPOSIT' THEN
+        set new.`Status` = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`ToBankName` = 'INTERNAL';
+        set new.`FromBankName` = 'INTERNAL';
+        set new.`FromName` = from_accountName;
+        set new.`ToName` = to_accountName;
 	end if;
     
    
 END //
 
 delimiter ;
+
+
 
 -- CREATES THE TRIGGER FOR ALL DEPOSIT TRANSACTIONS TO RECORD INTO THE DATABASE
 
@@ -328,23 +331,23 @@ drop trigger if exists deposit_into_account;
 
 delimiter //
 create trigger deposit_into_account
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare accountName varchar(10);
     declare accttype int;
     
     
-    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
-    select Name into accountName from AccountType where ID = accttype;
+    select `AccountType_ID` into accttype from `customer_accounts_account` where `AccountNumber` = new.`ToAccountNumber`;
+    select `Name` into accountName from `AccountType` where `ID` = accttype;
     
-	if new.Type = 'DEPOSIT' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.FromBankName = 'N/A';
-        set new.FromAccountNumber = 'N/A';
-        set new.ToBankName = 'CUSTOMER';
-        set new.ToName = accountName;
+	if new.`Type` = 'DEPOSIT' THEN
+        set new.`Status`  = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`FromBankName` = 'N/A';
+        set new.`FromAccountNumber` = 'N/A';
+        set new.`ToBankName` = 'CUSTOMER';
+        set new.`ToName` = accountName;
 	end if;
 END //
 
@@ -356,23 +359,23 @@ drop trigger if exists withdraw_from_account;
 
 delimiter //
 create trigger withdraw_from_account
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare accountName varchar(10);
     declare accttype int;
     
     
-    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
-    select Name into accountName from AccountType where ID = accttype;
+    select `AccountType_ID` into accttype from `customer_accounts_account` where `AccountNumber` = new.`FromAccountNumber`;
+    select `Name` into accountName from `AccountType` where `ID` = accttype;
     
-	if new.Type = 'WITHDRAWAL' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.ToBankName = 'N.A';
-        set new.ToAccountNumber = 'N.A';
-        set new.FromBankName = 'CUSTOMER';
-        set new.FromName = accountName;
+	if new.`Type` = 'WITHDRAWAL' THEN
+        set new.`Status` = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`ToBankName` = 'N.A';
+        set new.`ToAccountNumber` = 'N.A';
+        set new.`FromBankName` = 'CUSTOMER';
+        set new.`FromName` = accountName;
 	end if;
 END //
 
@@ -388,13 +391,13 @@ drop trigger if exists create_online_account_accounts;
 
 delimiter //
 create trigger create_online_account_accounts
-	before insert on onlinebankingacct
+	before insert on `OnlineBankingAcct`
 	for each row
 BEGIN
 	declare accountsID int;
 	
-    select ID into accountsID from accounts where Customer_ID = new.customerID;
-    set new.AccountsID = accountsID;
+    select `ID` into accountsID from `Accounts` where `Customer_ID` = new.`customerID`;
+    set new.`AccountsID` = accountsID;
     
     
 END //
@@ -409,7 +412,7 @@ drop trigger if exists debit_from_account;
 
 delimiter //
 create trigger debit_from_account
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare accountName varchar(10);
@@ -418,19 +421,19 @@ BEGIN
     declare cur_bal decimal(9,2);
     declare new_bal decimal(9,2);
     
-    select Accounts_ID into accountID from account where AccountNumber=new.FromAccountNumber;
-    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.FromAccountNumber;
-    select Name into accountName from AccountType where ID = accttype;
-    select Balance into cur_bal from account where AccountNumber = new.FromAccountNumber;
+    select `Accounts_ID` into accountID from `Account` where `AccountNumber` = new.`FromAccountNumber`;
+    select `AccountType_ID` into accttype from `customer_accounts_account` where `AccountNumber` = new.`FromAccountNumber`;
+    select `Name` into accountName from `AccountType` where `ID` = accttype;
+    select `Balance` into cur_bal from `Account` where `AccountNumber` = new.`FromAccountNumber`;
     
     
-	if new.Type = 'DEBIT' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.FromName = accountName;
-        set new.accountID = accountID;
-        set new_bal = cur_bal - new.amount;
-        update account set Balance = new_bal where AccountNumber = new.FromAccountNumber;
+	if new.`Type` = 'DEBIT' THEN
+        set new.`Status` = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`FromName` = accountName;
+        set new.`accountID` = accountID;
+        set new_bal = cur_bal - new.`Amount`;
+        update `Account` set `Balance` = new_bal where `AccountNumber` = new.`FromAccountNumber`;
         
         
 	end if;
@@ -446,7 +449,7 @@ drop trigger if exists credit_into_account;
 
 delimiter //
 create trigger credit_into_account
-	before insert on transaction
+	before insert on `Transaction`
 	for each row
 BEGIN
 	declare accountName varchar(10);
@@ -455,19 +458,19 @@ BEGIN
     declare cur_bal decimal(9,2);
     declare new_bal decimal(9,2);
     
-    select Accounts_ID into accountID from account where AccountNumber=new.ToAccountNumber;
-    select AccountType_ID into accttype from customer_accounts_account where AccountNumber = new.ToAccountNumber;
-    select Name into accountName from AccountType where ID = accttype;
-    select Balance into cur_bal from account where AccountNumber = new.ToAccountNumber;
+    select `Accounts_ID` into accountID from `Account` where `AccountNumber` = new.`ToAccountNumber`;
+    select `AccountType_ID` into accttype from `customer_accounts_account` where `AccountNumber` = new.`ToAccountNumber`;
+    select `Name` into accountName from `AccountType` where `ID` = accttype;
+    select `Balance` into cur_bal from `Account` where `AccountNumber` = new.`ToAccountNumber`;
     
     
-	if new.Type = 'CREDIT' THEN
-        set new.Status = 'SUCCESSFUL';
-        set new.DateAndTime = current_timestamp();
-        set new.ToName = accountName;
-        set new.accountID = accountID;
+	if new.`Type` = 'CREDIT' THEN
+        set new.`Status` = 'SUCCESSFUL';
+        set new.`DateAndTime` = current_timestamp();
+        set new.`ToName` = accountName;
+        set new.`accountID` = accountID;
         set new_bal = cur_bal + new.amount;
-        update account set Balance = new_bal where AccountNumber = new.ToAccountNumber;
+        update `Account` set `Balance` = new_bal where `AccountNumber` = new.`ToAccountNumber`;
         
         
 	end if;

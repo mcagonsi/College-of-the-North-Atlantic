@@ -7,12 +7,6 @@ from objs import actors as A
 
 
 
-
-# print(BANK.accounts)
-# print(BANK.customers)
-# print(BANK.accountsids)
-#
-# BANK.validateAccountNumber()
 @dataclass
 class API:
     _name = None
@@ -22,10 +16,10 @@ class API:
     _endpoint = None
 
     def __post_init__(self):
-        self._name = E.Bank('TESLA INC BANK','2 Skywalket Avenue', 'Oacis', 'Marsian City', 'Mars','184 3DE').bankName
+        self._name = E.Bank('ROYAL BANK OF CANADA','2 Skywalket Avenue', 'Oacis', 'Marsian City', 'Mars','184 3DE').bankName
         self._headers = (getBankCustomers(),getBankAccountsIDs())
         self._body = getBankAccounts()
-        self._endpoint = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
+        self._endpoint = db.connect(host='localhost', user='root', passwd='root', port=3306, database='rbcdb')
     @property
     def name(self):
         return self._name
@@ -76,7 +70,7 @@ def validateAccountNumber(customers,accountsIDs,accounts,accountNumber):
 
 #connection dependencies for the api
 def getBankAccountsIDs():
-    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
+    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='rbcdb')
     C = CON.cursor()
     getBankAccountsIDs = 'select * from `Accounts`;'
     C.execute(getBankAccountsIDs)
@@ -92,7 +86,7 @@ def getBankAccountsIDs():
         return None
 
 def getBankCustomers():
-    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
+    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='rbcdb')
     C = CON.cursor()
     getCustomers = 'select * from `Customer`'
     C.execute(getCustomers)
@@ -113,7 +107,7 @@ def getBankCustomers():
 
 
 def getBankAccounts():
-    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='tesladb')
+    CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='rbcdb')
     C = CON.cursor()
     getBankAccounts = 'select * from `account`;'
     C.execute(getBankAccounts)

@@ -2,6 +2,7 @@ import sys
 sys.path.append("UIs")
 sys.path.append("../encryp/psd.encryp.locked")
 sys.path.append('../Tesla Inc Bank/APIs')
+sys.path.append('APIs')
 import login_create_account as Bank_App
 
 def main():
@@ -11,3 +12,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

@@ -138,7 +138,7 @@ def main():
     # getCustomerInfo(1)
     # print(getTransactionHistory(25887740))
     # print(validateFinancialAccountandCheckOnlineAcct(10576928, 'AGONSI', '2000-04-19'))
-    getBankAccounts()
+    # print(getBankAccounts())
     pass
 if __name__ == '__main__':
     main()

@@ -112,9 +112,6 @@ class ExternalClient:
     _Amount:float
 
 
-    def __post_init__(self):
-        pass
-        # self._Bank = Bank() #this should instantiate the selected bank class and accounts for validating client
 
     @property
     def FullName(self):
