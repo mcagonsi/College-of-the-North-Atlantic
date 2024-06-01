@@ -1,1 +1,0 @@
-insert into customer values (default,'MICHAEL','AGONSI','MALE','2000-04-19','SINGLE','7097645352','IMO','NIGERIA','30 DIANA ROAD',"ST. JOHN'S",'CANADA','A1B 1H8');
