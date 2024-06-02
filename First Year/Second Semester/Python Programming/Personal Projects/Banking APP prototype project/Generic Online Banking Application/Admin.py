@@ -12,7 +12,7 @@ c = con.cursor()
 # always use c.fetchall() to buffer the cursor to avoid internal error: unreadable result from sql
 
 
-# always use c.fetchall() to buffer the cursor to avoid internal error: unreadable result from sql
+
 
 
 def openCustomerAccount():

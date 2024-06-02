@@ -70,8 +70,3 @@ def getpin():
     except Exception as e:
         return None
 
-# password = encrypt('michael')
-# str_password = password.decode('utf-8')
-# print(str_password)
-# dpassword = str_password.encode('utf-8')
-# print(dpassword)

@@ -19,6 +19,8 @@ import mysql.connector as db
 con = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
 c = con.cursor()
 
+
+#creates the account overview menu
 @dataclass
 class AccountOverviewMenu(tk.Tk):
 
@@ -202,6 +204,5 @@ class AccountOverviewMenu(tk.Tk):
             child.grid_configure(padx=8, pady=8)
 
 
-# account = AccountOverviewMenu(E.OnlineBankingAccount(1,'Agonsimichael1233@gmail.com','pssddd',1,4848)).mainloop()
 
 

@@ -53,7 +53,6 @@ class Bank:
         else:
             return None,None
         pass
-       # if value in self._Accounts: # this is to validate customer account exists for the external client to return the name of the client during transactions
 
 
 @dataclass
@@ -71,7 +70,7 @@ class AccountType:
 
     def __post_init__(self):
 
-        query = 'select * from accounttype;'
+        query = 'select * from `AccountType`;'
         c.execute(query)
         types = c.fetchall()
         for t in types:
@@ -89,7 +88,7 @@ class Accounts:
         CON = db.connect(host='localhost', user='root', passwd='root', port=3306, database='bankdb')
         C = CON.cursor()
 
-        getaccounts = 'select * from account where Accounts_ID = %s '
+        getaccounts = 'select * from `Account` where Accounts_ID = %s '
         C.execute(getaccounts, (self._ID,))
         Accounts = C.fetchall()
         for a in Accounts:
@@ -97,7 +96,7 @@ class Accounts:
                 self._Accounts[a[0]] = Account(a[0],a[1],a[2],AccountType(a[3]),a[4])
         CON.close()
 
-        #should initialize the _Accounts to get all accounts with respective customerID and AccountsID from the database
+
 
     def getTotalBalance(self):
         total_balance = 0
@@ -115,7 +114,7 @@ class Accounts:
 
 @dataclass
 class Account:
-    _AccountNumber:int # this is written in the database as union of the accountsID and any random generated 4 numbers
+    _AccountNumber:int
     _Balance: float
     _Active: bool
     _AccountType: AccountType
@@ -145,14 +144,14 @@ class Account:
         return locale.currency(self._Balance,grouping=True)
 
     def creditAccount(self,Trns):
-        creditAccount ="insert into transaction(ID,type,amount,FromBankName,FromName,FromAccountNumber,ToBankName,ToAccountNumber) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
+        creditAccount ="insert into `Transaction`(ID,type,amount,FromBankName,FromName,FromAccountNumber,ToBankName,ToAccountNumber) values (default,'CREDIT',%s,%s,%s,%s,%s,%s);"
         c.execute(creditAccount,(Trns.amount,Trns.fromBankName,Trns.From,Trns.fromAccountNumber,Trns.toBankName,Trns.toAccountNumber))
         con.commit()
 
         return True
 
     def debitAccount(self,Trns):
-        debitAccount = "insert into transaction(ID,type,amount,FromBankName,FromAccountNumber,ToBankName,ToName,ToAccountNumber) values (default,'DEBIT',%s,%s,%s,%s,%s,%s);"
+        debitAccount = "insert into `Transaction`(ID,type,amount,FromBankName,FromAccountNumber,ToBankName,ToName,ToAccountNumber) values (default,'DEBIT',%s,%s,%s,%s,%s,%s);"
         c.execute(debitAccount,(Trns.amount,Trns.fromBankName,Trns.fromAccountNumber,Trns.toBankName,Trns.to,Trns.toAccountNumber))
         con.commit()
 
@@ -161,7 +160,6 @@ class Account:
     def showTransactionHistory(self):
         rdb.getTransactionHistory(self)
 
-        #Transactons = # instantiate from the Transaction history class based on the AccountNumber
 
 
 @dataclass
@@ -289,8 +287,7 @@ class OnlineBankingAccount:
 
 
 def main():
-    # acct=TransactionHistory(25887740)
-    # print(acct.history)
+
     pass
 
 

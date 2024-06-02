@@ -25,6 +25,7 @@ CUSTOMER_ID = None
 ACCOUNTS_ID = None
 
 
+#creates the login window
 @dataclass
 class Login(tk.Tk):
     def __init__(self):
@@ -70,7 +71,7 @@ class Login(tk.Tk):
             validate.mainloop()
 
         # LOGO LABEL
-        logo = Label(frame, text='TESLA INC. BANK', width=35, font=('Arial', 14), )
+        logo = Label(frame, text='DEMO BANK', width=35, font=('Arial', 14), )
         logo.grid(row=0, column=1, columnspan=5, sticky='ew')
 
         # EMAIL LABEL
@@ -106,7 +107,7 @@ class Login(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=10, pady=10)
 
-
+#creates the create online account window
 @dataclass
 class CreateAccount(tk.Tk):
     def __init__(self):
@@ -197,6 +198,7 @@ class CreateAccount(tk.Tk):
             child.grid_configure(padx=10, pady=10)
 
 
+#creates the validate account window
 @dataclass
 class ValidateAccount(tk.Tk):
     def __init__(self):

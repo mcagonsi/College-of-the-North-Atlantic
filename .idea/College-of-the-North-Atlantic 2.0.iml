@@ -7,6 +7,10 @@
     <orderEntry type="jdk" jdkName="C:\Users\Michael\anaconda3 (4)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="C:\Users\Michael\Documents\COURSE WORK\MY GITHUB PORTFOLIO\First Year\Second Semester\Python Programming\Personal Projects\Banking APP prototype project\Generic Online Banking Application\venv\pyvenv.cfg" />
+    <option name="removeUnused" value="true" />
+  </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="NUMPY" />
     <option name="myDocStringFormat" value="NumPy" />

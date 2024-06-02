@@ -106,7 +106,7 @@ class Customer(Person):
 
 @dataclass
 class ExternalClient:
-    _Bank: str # this will have to take a bank class as the input.
+    _Bank: str
     _FullName:str
     _AccountNumber:int
     _Amount:float
@@ -114,7 +114,7 @@ class ExternalClient:
 
     def __post_init__(self):
         pass
-        # self._Bank = Bank() #this should instantiate the selected bank class and accounts for validating client
+
 
     @property
     def FullName(self):

@@ -20,13 +20,14 @@ from objs import actors as I
 # THESE IMPORTS WILL ACT LIKE THE IPs FOR SIMULATING API CALLS
 
 #for Tesla Bank
-from APIs import BankAPI as TeslaBank
+from APIs import BankAPI as Bank
 
 #for RBC
 
 
-BANKS_API = [TeslaBank.API()]
+BANKS_API = [Bank.API()]
 
+# creates the receive money window
 @dataclass
 class ReceiveMoney(tk.Tk):
     def __init__(self, accounts):
@@ -60,7 +61,7 @@ class ReceiveMoney(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=10, pady=10)
 
-
+#creates the set transaction pin window
 @dataclass
 class SetTransactionsPin(tk.Tk):
     def __init__(self, customerID, AccountsID, OnlineBankingAcct):
@@ -129,7 +130,7 @@ class SetTransactionsPin(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=10, pady=8)
 
-CUSTOMER = rdb.getCustomerInfo(1)
+#creates the profile details window
 @dataclass
 class ProfileDetails(tk.Tk):
     def __init__(self, CUSTOMER,OnlineBankingAcct):
@@ -245,7 +246,7 @@ class ProfileDetails(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=10, pady=10)
 
-
+#creates the send money window
 @dataclass
 class SendMoney(tk.Tk):
 
@@ -391,6 +392,7 @@ class SendMoney(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
+#creates the transfer money window
 @dataclass
 class TransferMoney(tk.Tk):
     def __init__(self,OnlineBankingAcct,accounts):
@@ -471,6 +473,7 @@ class TransferMoney(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
+#creates the change login details window
 @dataclass
 class ChangeLoginDetails(tk.Tk):
     def __init__(self,OnlineBankingAcct):
@@ -549,7 +552,7 @@ class ChangeLoginDetails(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
-
+#creates the transaction history window
 @dataclass
 class TransactionHistory(tk.Tk):
     def __init__(self,AccountsID):
@@ -633,6 +636,7 @@ class TransactionHistory(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=20, pady=20)
 
+#creates the create account window
 @dataclass
 class CreateAccount(tk.Tk):
     def __init__(self,OnlineBankingAcct):
@@ -694,6 +698,7 @@ class CreateAccount(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
+#creates the close accounts window
 @dataclass
 class CloseAccount(tk.Tk):
     def __init__(self,CUSTOMER,OnlineBankingAcct):
@@ -762,6 +767,7 @@ class CloseAccount(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
+#creates the close online accounts window
 @dataclass
 class CloseOnlineAccount(tk.Tk):
     def __init__(self,CUSTOMER,OnlineBankingAcct):
@@ -838,10 +844,3 @@ class CloseOnlineAccount(tk.Tk):
         for child in frame.winfo_children():
             child.grid_configure(padx=12, pady=12)
 
-# profile = ProfileDetails(CUSTOMER).mainloop()
-# ChangeLoginDetails(None).mainloop()
-# TransactionHistory(25887740).mainloop()
-# CreateAccount(2558).mainloop()
-# CloseOnlineAccount('','3').mainloop()
-
-# CloseOnlineAccount('s','s ').mainloop()

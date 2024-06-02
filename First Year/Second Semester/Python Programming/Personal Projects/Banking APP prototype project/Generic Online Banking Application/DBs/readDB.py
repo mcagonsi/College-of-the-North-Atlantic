@@ -12,7 +12,7 @@ DATE_FORMAT = '%m/%d/%Y'
 
 def searchOnlineAccount(email):
     c.fetchall()
-    searchOnlineBankingAcct = 'SElECT * from OnlineBankingAcct where Email = %s'
+    searchOnlineBankingAcct = 'SElECT * from `OnlineBankingAcct` where Email = %s'
     c.execute(searchOnlineBankingAcct, (email,))
 
     onlineAccount = c.fetchone()
@@ -28,7 +28,7 @@ def validateFinancialAccountandCheckOnlineAcct(chequing_no,lName,DOB):
 
     try:
 
-        validateFinancialAccount = 'SELECT ID, accounts_id from Customer_Accounts_Account where AccountNumber = %s and LastName = %s '
+        validateFinancialAccount = 'SELECT ID, accounts_id from `Customer_Accounts_Account` where AccountNumber = %s and LastName = %s '
         c.execute(validateFinancialAccount, (chequing_no, lName))
         custinfo = c.fetchone()
 
@@ -36,7 +36,7 @@ def validateFinancialAccountandCheckOnlineAcct(chequing_no,lName,DOB):
             custID = custinfo[0]
             accountsID = custinfo[1]
             c.fetchall()
-            searchCustomerInfo = 'SELECT FirstName from Customer where ID = %s and DOB = %s;'
+            searchCustomerInfo = 'SELECT FirstName from `Customer` where ID = %s and DOB = %s;'
             c.execute(searchCustomerInfo, (custID,DOB))
             firstName = c.fetchone()[0]
 
@@ -48,7 +48,7 @@ def validateFinancialAccountandCheckOnlineAcct(chequing_no,lName,DOB):
 def checkOnlineAccountExists(custID):
 
     c.fetchall()
-    checkingOnlineAcctExists = 'SELECT ID from OnlineBankingAcct where customerID = %s;'
+    checkingOnlineAcctExists = 'SELECT ID from `OnlineBankingAcct` where customerID = %s;'
     c.execute(checkingOnlineAcctExists, (custID,))
     OnlineID = c.fetchone()
     if OnlineID is not None:
@@ -58,13 +58,13 @@ def checkOnlineAccountExists(custID):
 
 def getCustomerInfo(custID):
 
-    getcustomer = 'select * from Customer where ID = %s'
+    getcustomer = 'select * from `Customer` where ID = %s'
     c.execute(getcustomer, (custID,))
     cust = c.fetchone()
     customer = A.Customer(cust[1], cust[2], cust[3], cust[4].isoformat(), cust[5], cust[6], cust[7], cust[8], cust[9], cust[10], cust[11], cust[12], cust[0])
     return customer
 def getTransactionHistory(accountsID):
-    getTransHistory = 'select * from Transaction where accountID = %s order by ID desc'
+    getTransHistory = 'select * from `Transaction` where accountID = %s order by ID desc'
     c.execute(getTransHistory, (accountsID,))
     transHistory = c.fetchall()
 
@@ -79,7 +79,7 @@ def getTransactionHistory(accountsID):
 
 def getBankAccounts():
 
-    getBankAccounts = 'select * from account'
+    getBankAccounts = 'select * from `Account`'
     c.execute(getBankAccounts)
     Accounts = {}
     readAccts = c.fetchall()
@@ -94,7 +94,7 @@ def getBankAccounts():
     else:
         return None
 def getBankCustomers():
-    getCustomers = 'select * from Customer'
+    getCustomers = 'select * from `Customer`'
     c.execute(getCustomers)
     CUSTOMERS = {}
     customers = c.fetchall()
@@ -108,7 +108,7 @@ def getBankCustomers():
         return None
 
 def getBankAccountsIDs():
-    getBankAccountsIDs = 'select * from Accounts'
+    getBankAccountsIDs = 'select * from `Accounts`'
     c.execute(getBankAccountsIDs)
     ACCOUNTSIDs = {}
     AccountsIDs = c.fetchall()
@@ -122,10 +122,6 @@ def getBankAccountsIDs():
 
 
 def main():
-    # getCustomerInfo(1)
-    # print(getTransactionHistory(25887740))
-    # print(validateFinancialAccountandCheckOnlineAcct(10576928, 'AGONSI', '2000-04-19'))
-    getBankAccounts()
     pass
 if __name__ == '__main__':
     main()

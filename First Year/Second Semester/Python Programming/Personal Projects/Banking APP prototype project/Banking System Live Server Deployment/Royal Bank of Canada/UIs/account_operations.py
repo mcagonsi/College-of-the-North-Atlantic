@@ -20,17 +20,18 @@ from objs import actors as I
 
 
 # THESE IMPORTS WILL ACT LIKE THE IPs FOR SIMULATING API CALLS
-
-#for RBC Bank
-import RBCanada as RBC
-
-# for Tesla Bank
+# for ScotiaBank
+import ScotiaAPI as SCOTIA
+#for TESLA Bank
 import TeslaAPI as TESLA
+# FOR RBC
+import RBCanada as RBC
+# FOR TDBANK
+import TDBankAPI as TDBANK
 
 
+BANKS_API = [SCOTIA.API(),TESLA.API(),RBC.API(),TDBANK.API()]
 
-
-BANKS_API = [RBC.API(),TESLA.API()]
 
 @dataclass
 class ReceiveMoney(tk.Tk):
