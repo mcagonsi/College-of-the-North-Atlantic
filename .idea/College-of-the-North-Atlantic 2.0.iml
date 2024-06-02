@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="C:\Users\Agons_000\Documents\anaconda (2)" jdkType="Python SDK" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/First Year/Second Semester/Python Programming/Personal Projects/Generic Online Banking Application/venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="C:\Users\Michael\anaconda3 (4)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="C:\Users\Michael\Documents\COURSE WORK\MY GITHUB PORTFOLIO\First Year\Second Semester\Python Programming\Personal Projects\Banking APP prototype project\Generic Online Banking Application\venv\pyvenv.cfg" />
+    <option name="removeUnused" value="true" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="NUMPY" />
